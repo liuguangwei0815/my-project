@@ -1,0 +1,6 @@
+server:
+  port: 7017
+#服务的名称
+spring:
+  application:
+    name: securiyt-demo
