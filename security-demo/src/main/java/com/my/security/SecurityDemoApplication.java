@@ -6,9 +6,9 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 
 
 @SpringBootApplication
-public class Application {
+public class SecurityDemoApplication {
 	public static void main(String[] args) {
-		new SpringApplicationBuilder(Application.class).web(WebApplicationType.SERVLET).run(args);
+		new SpringApplicationBuilder(SecurityDemoApplication.class).web(WebApplicationType.SERVLET).run(args);
 	}
 
 }
