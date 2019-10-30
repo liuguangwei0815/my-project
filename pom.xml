@@ -36,6 +36,13 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>fastjson</artifactId>
+				<version>1.2.46</version>
+			</dependency>
+
 			<dependency>
 				<groupId>com.my.security</groupId>
 				<artifactId>security-core</artifactId>

@@ -1,22 +1,36 @@
 package com.test.mockmvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.alibaba.fastjson.JSON;
 import com.my.security.SecurityDemoApplication;
+import com.my.security.dto.User;
+
+import ch.qos.logback.core.util.ContentTypeUtil;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SecurityDemoApplication.class)
@@ -59,12 +73,50 @@ public class TestJJ {
 
 	@Test
 	public void createSucceTest() throws Exception {
-		String contenxt = "{\"userName\":\"tomc\",\"passWord\":\"null\"}";
-		mockMvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON_UTF8)
-				.content(contenxt))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.id").value("1"));
+		Date date = new Date();
+		long datadd = date.getTime();
+		String contenxt = "{\"username\":\"tomc\",\"password\":\"123\",\"birthday\":\"" + datadd + "\"}";
+		String result = mockMvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON_UTF8).content(contenxt))
+				.andExpect(status().isOk())
+				// .andExpect(jsonPath("$.id").value("1"))
+				.andReturn().getResponse().getContentAsString();
+		System.err.println("result===》" + result);
 
+	}
+
+	@Test
+	public void updateSucceTest() throws Exception {
+		Date date = new Date(
+				LocalDateTime.now().plusYears(1).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+		long datadd = date.getTime();
+		String contenxt = "{\"id\":1,\"username\":\"tomc\",\"password\":\"123\",\"birthday\":\"" + datadd + "\"}";
+		String result = mockMvc.perform(put("/user/1").contentType(MediaType.APPLICATION_JSON_UTF8).content(contenxt))
+				.andExpect(status().isOk())
+				// .andExpect(jsonPath("$.id").value("1"))
+				.andReturn().getResponse().getContentAsString();
+		System.err.println("result===》" + result);
+
+	}
+
+	@Test
+	public void delSucceTest() throws Exception {
+		Date date = new Date(
+				LocalDateTime.now().plusYears(1).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+		long datadd = date.getTime();
+		String contenxt = "{\"id\":1,\"username\":\"tomc\",\"password\":\"123\",\"birthday\":\"" + datadd + "\"}";
+		mockMvc.perform(delete("/user/1").contentType(MediaType.APPLICATION_JSON_UTF8).content(contenxt))
+				.andExpect(status().isOk());
+		// .andExpect(jsonPath("$.id").value("1"))
+//				.andReturn().getResponse().getContentAsString();
+//		System.err.println("result===》" + result);
+
+	}
+
+	@Test
+	public void upFileSuccess() throws Exception {
+		mockMvc.perform(fileUpload("/file").file(
+				new MockMultipartFile("multipartFile", "test.txt", "multipart/from-data", "howwlll dd".getBytes())))
+				.andExpect(status().isOk());
 	}
 
 }
