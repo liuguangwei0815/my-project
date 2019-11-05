@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
 
 @Aspect
-@Slf4j
 @Component
+@Slf4j
 public class TimerAspectAnnotiation {
 
 	@Around(value = "@annotation(com.my.security.aspect.TimerAntiontation)")

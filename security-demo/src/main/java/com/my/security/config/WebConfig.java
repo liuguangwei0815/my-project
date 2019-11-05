@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
@@ -23,6 +24,14 @@ public class WebConfig extends WebMvcConfigurationSupport{
 	
 	@Autowired
 	private TimerInterceptor timerInterceptor;
+	
+	/**
+	 * 针对异步请求如果用下面的addINtercepters没有效果的必须使用以下
+	 */
+	/*
+	 * @Override protected void configureAsyncSupport(AsyncSupportConfigurer
+	 * configurer) { configurer.registerDeferredResultInterceptors(interceptors); }
+	 */
 	
 	@Override
 	protected void addInterceptors(InterceptorRegistry registry) {
