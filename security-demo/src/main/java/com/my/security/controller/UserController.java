@@ -24,7 +24,10 @@ import com.my.security.aspect.TimerAntiontation;
 import com.my.security.dto.ResultVo;
 import com.my.security.dto.User;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @Scope("prototype")
@@ -55,6 +58,7 @@ public class UserController {
 	}
 	
 	@DeleteMapping("/{id:\\d+}")
+	@ApiIgnore
 	public ResultVo dele(@Valid @RequestBody User user,BindingResult errors) {
 		if (errors.hasErrors()) {
 			return errors.getAllErrors().stream().map(e -> ResultVo.retFileErorMsg(e)).findFirst()
@@ -69,7 +73,8 @@ public class UserController {
 
 	@GetMapping
 	@JsonView(User.UserSimpleView.class)
-	public List<User> list(@RequestParam String userName) {
+	@ApiOperation("用户列表查询服务")
+	public List<User> list(@ApiParam("用户姓名")@RequestParam String userName) {
 		log.info("接收参数：{}", userName);
 		List<User> list = new ArrayList<User>();
 		User user1 = new User();

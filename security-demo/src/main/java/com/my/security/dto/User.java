@@ -9,6 +9,7 @@ import javax.validation.constraints.Past;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.my.security.validata.MyContraint;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,7 @@ public class User implements Serializable{
 	@JsonView(value = UserSimpleView.class)
 	@NotBlank(message = "用户名不允许为空")
 	@MyContraint(message = "这是个测试注解")
+	@ApiModelProperty("用户姓名")
 	private String username;
 	@JsonView(value = UserDetailView.class)
 	@NotBlank(message = "密码不允许为空")
