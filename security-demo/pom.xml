@@ -73,6 +73,12 @@
 
 
 
+		<dependency>
+			<groupId>com.github.tomakehurst</groupId>
+			<artifactId>wiremock</artifactId>
+			<version>2.14.0</version>
+		</dependency>
+
 
 		<!-- 自有项目 -->
 		<dependency>
