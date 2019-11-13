@@ -2,6 +2,7 @@ package com.my.security.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -24,14 +25,25 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
 	                .paths(PathSelectors.any())
 	                .build();
 	    }
-	 
-	 
-	    @Override
+	    
+	    
+
+
+		@Override
 	    public void addResourceHandlers(ResourceHandlerRegistry registry) {
 	        registry.addResourceHandler("swagger-ui.html")
 	                .addResourceLocations("classpath:/META-INF/resources/");
 	        registry.addResourceHandler("/webjars/**")
 	                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+	        //自定义页面
+	        registry.addResourceHandler("login-demo.html")
+            .addResourceLocations("classpath:/resources/");
+	        //公共部分自带登录
+	        registry.addResourceHandler("login-simple.html")
+            .addResourceLocations("classpath:/resources/");
+	        
+	        
+	        
 	    }
 	 
 	 

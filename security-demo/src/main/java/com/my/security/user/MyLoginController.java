@@ -1,14 +1,14 @@
-package com.my.security.browser.controller;
+package com.my.security.user;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class LoginController {
+public class MyLoginController {
 
-	@GetMapping("login-in.html")
+	@GetMapping("/demo/login-demo.html")
 	public String login() {
-		return "/login/login-in";
+		return "/login/login-demo";
 	}
 	
 }

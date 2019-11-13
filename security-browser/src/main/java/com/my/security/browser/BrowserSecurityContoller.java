@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.my.security.browser.support.SimpleResponse;
+import com.my.security.properites.SecurityProperties;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,7 +34,10 @@ public class BrowserSecurityContoller {
 	
 	private RedirectStrategy strategy = new DefaultRedirectStrategy();
 	
-	@RequestMapping("/authentication/require")
+	@Autowired
+	private SecurityProperties securityProperties;
+	
+	@RequestMapping("/require")
 	@ResponseStatus(value = HttpStatus.UNAUTHORIZED)
 	public SimpleResponse autenticationRequir(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		SavedRequest save = requestCache.getRequest(request, response);
@@ -41,8 +46,9 @@ public class BrowserSecurityContoller {
 			String targetUrl = save.getRedirectUrl();
 			log.info("引发安全认证的请求路径==>{}",targetUrl);
 			if(targetUrl.endsWith(".html")) {
+				log.info("获取登录页面地址:{}",securityProperties.getBrowser().getLoginpage());
 				//跳转到登录页面
-				strategy.sendRedirect(request, response, "");
+				strategy.sendRedirect(request, response, securityProperties.getBrowser().getLoginpage());
 			}
 		}
 		
