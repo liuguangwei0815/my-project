@@ -19,7 +19,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		log.info("获取用户名：", username);
+		log.info("获取用户名：{}", username);
 		return new User(username, passwordEncoder.encode("123456"), true, true, true, true,
 				AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
 	}

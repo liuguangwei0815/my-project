@@ -37,7 +37,7 @@ public class BrowserSecurityContoller {
 	@Autowired
 	private SecurityProperties securityProperties;
 	
-	@RequestMapping("/require")
+	@RequestMapping("/authentication/require")
 	@ResponseStatus(value = HttpStatus.UNAUTHORIZED)
 	public SimpleResponse autenticationRequir(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		SavedRequest save = requestCache.getRequest(request, response);
