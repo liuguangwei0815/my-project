@@ -10,10 +10,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.my.security.browser.authentication.MyAuthenticationFailHandler;
 import com.my.security.browser.authentication.MyAuthenticationSuccessHandler;
 import com.my.security.properites.SecurityProperties;
+import com.my.security.vaidata.code.ImageCodeFilter;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,8 +36,14 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
+		ImageCodeFilter imageCodeFilter = new ImageCodeFilter();
+		imageCodeFilter.setAuthenticationFailureHandler(myAuthenticationFailHandler);
+		imageCodeFilter.setSecurityProperties(securityProperties);
+		imageCodeFilter.afterPropertiesSet();
+		
 		log.info("获取配置文件的登录页面:{}", securityProperties.getBrowser().getLoginpage());
 		// 认证方式
+		http.addFilterBefore(imageCodeFilter, UsernamePasswordAuthenticationFilter.class);
 		http.formLogin()
 				// basic 认证
 				// http.httpBasic()
@@ -61,6 +69,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 		List<String> loginUrl = new ArrayList<String>();
 		loginUrl.add("/login-simple.html");
 		loginUrl.add("/error");
+		loginUrl.add("/image/code");
 		if (securityProperties.getBrowser() != null
 				&& StringUtils.isNotBlank(securityProperties.getBrowser().getLoginpage())
 				&& !StringUtils.equals("/login-simple.html", securityProperties.getBrowser().getLoginpage())) {

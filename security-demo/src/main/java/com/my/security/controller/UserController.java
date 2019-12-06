@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +35,13 @@ import springfox.documentation.annotations.ApiIgnore;
 @Slf4j
 @RequestMapping("/user")
 public class UserController {
+	
+	
+	@GetMapping("/me")
+	public ResultVo meinfocreate(Authentication authentication) {
+		//return ResultVo.retSucc(SecurityContextHolder.getContext().getAuthentication());
+		return  ResultVo.retSucc(authentication);
+	}
 
 	@PostMapping
 	public ResultVo create(@Valid @RequestBody User user, BindingResult errors) {

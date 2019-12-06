@@ -19,6 +19,7 @@ public class SecurityProperties {
 	
 	
 	private BrowerPerperties browser = new BrowerPerperties();
+	private CodeProperties code = new CodeProperties();
 	
 
 
