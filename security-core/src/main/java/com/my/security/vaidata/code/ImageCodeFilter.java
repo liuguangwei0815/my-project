@@ -3,7 +3,6 @@ package com.my.security.vaidata.code;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import javax.servlet.FilterChain;
@@ -76,12 +75,11 @@ public class ImageCodeFilter extends OncePerRequestFilter implements Initializin
 		// log.info("saveRequest get Url:{}", url);
 		log.info("request get UrI:{}", request.getRequestURI());
 		boolean action = Boolean.FALSE;
-		action = setUrl.stream().filter(e->pathMatcher.match(request.getRequestURI(), e)).findFirst().isPresent();
-		Optional<String> ostring = setUrl.stream().filter(e->pathMatcher.match(request.getRequestURI(), e)).findFirst();
-		log.info("Optional.get：{}",ostring.get());
-		log.info("pathMatcher.match:{},url:{}",pathMatcher.match(request.getRequestURI(),"/user/1"),request.getRequestURI());
+		action = setUrl.stream().filter(e->pathMatcher.match(e, request.getRequestURI())).findFirst().isPresent();
+		log.info("action 是否匹配上:{}",action);
+		setUrl.stream().forEach(e->log.info("e:{},是否匹配：{}",e,pathMatcher.match(e, request.getRequestURI())));
 		// 获取当前请求连接
-		if (action&& StringUtils.equalsIgnoreCase(request.getMethod(), "post")) {
+		if (action) {
 			try {
 				validataImageCode(request, response);
 			} catch (ImageCodeException e) {
