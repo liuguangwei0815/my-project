@@ -18,6 +18,7 @@ public class ImageCodeGenneratorConfig {
 	@Autowired
 	private  SecurityProperties securityProperties;
 	
+	
 	@Bean
 	@ConditionalOnMissingBean(name = "imageCodeGennerator")
 	public ImageCodeGennerator imageCodeGennerator() {
