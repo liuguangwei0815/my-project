@@ -48,7 +48,7 @@ public class ImageCodeFilter extends OncePerRequestFilter implements Initializin
 	@Setter
 	@Getter
 	SecurityProperties securityProperties;
-	
+
 	PathMatcher pathMatcher = new AntPathMatcher();
 
 	Set<String> setUrl = new HashSet<String>();
@@ -61,10 +61,11 @@ public class ImageCodeFilter extends OncePerRequestFilter implements Initializin
 		super.afterPropertiesSet();
 		String[] configUrl = StringUtils
 				.splitByWholeSeparatorPreserveAllTokens(securityProperties.getCode().getImage().getUrl(), ",");
-		Arrays.stream(configUrl).sorted().forEach(e->setUrl.add(e));
+		if (configUrl != null && configUrl.length != 0)
+			Arrays.stream(configUrl).sorted().forEach(e -> setUrl.add(e));
 		// 登录验证必须得图形验证码验证
 		setUrl.add("/authentication/form");
-		setUrl.stream().forEach(e->log.info("加载图片验证码连接url:{}",e));
+		setUrl.stream().forEach(e -> log.info("加载图片验证码连接url:{}", e));
 	}
 
 	@Override
@@ -75,9 +76,9 @@ public class ImageCodeFilter extends OncePerRequestFilter implements Initializin
 		// log.info("saveRequest get Url:{}", url);
 		log.info("request get UrI:{}", request.getRequestURI());
 		boolean action = Boolean.FALSE;
-		action = setUrl.stream().filter(e->pathMatcher.match(e, request.getRequestURI())).findFirst().isPresent();
-		log.info("action 是否匹配上:{}",action);
-		setUrl.stream().forEach(e->log.info("e:{},是否匹配：{}",e,pathMatcher.match(e, request.getRequestURI())));
+		action = setUrl.stream().filter(e -> pathMatcher.match(e, request.getRequestURI())).findFirst().isPresent();
+		log.info("action 是否匹配上:{}", action);
+		setUrl.stream().forEach(e -> log.info("e:{},是否匹配：{}", e, pathMatcher.match(e, request.getRequestURI())));
 		// 获取当前请求连接
 		if (action) {
 			try {
@@ -90,7 +91,6 @@ public class ImageCodeFilter extends OncePerRequestFilter implements Initializin
 		filterChain.doFilter(request, response);
 
 	}
-	
 
 	private void validataImageCode(HttpServletRequest request, HttpServletResponse response)
 			throws ServletRequestBindingException {

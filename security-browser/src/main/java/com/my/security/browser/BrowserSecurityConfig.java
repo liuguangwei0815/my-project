@@ -3,14 +3,20 @@ package com.my.security.browser;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import com.my.security.browser.authentication.MyAuthenticationFailHandler;
 import com.my.security.browser.authentication.MyAuthenticationSuccessHandler;
@@ -29,10 +35,14 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 	private MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
 	@Autowired
 	private MyAuthenticationFailHandler myAuthenticationFailHandler;
-	
 	@Autowired
 	private SecurityProperties securityProperties;
-
+	@Autowired
+	private UserDetailsService userDetailsService;
+	@Autowired
+	private DataSource dataSource;
+	
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
@@ -59,10 +69,24 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 				// 授权
 				.authorizeRequests().antMatchers("/authentication/require").permitAll().antMatchers(getUrlaArr())
 				.permitAll().anyRequest().authenticated().and().csrf().disable();
+		//记住我
+		http.rememberMe()
+		.tokenRepository(persistentTokenRepository())
+		.userDetailsService(userDetailsService);
 
 		// http.antMatcher("/**").authorizeRequests().anyRequest().permitAll();
 
 	}
+	
+	
+	@Bean
+	public PersistentTokenRepository persistentTokenRepository() {
+		JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
+		repo.setDataSource(dataSource);
+		//repo.setCreateTableOnStartup(true);
+		return repo;
+	}
+	
 
 	// 获取配置文件的登录连接页面
 	private String[] getUrlaArr() {
