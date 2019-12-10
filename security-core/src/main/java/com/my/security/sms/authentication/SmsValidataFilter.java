@@ -1,4 +1,4 @@
-package com.my.security.vaidata.code;
+package com.my.security.sms.authentication;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -25,6 +25,9 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.my.security.properites.SecurityProperties;
+import com.my.security.vaidata.code.CodeContant;
+import com.my.security.vaidata.code.ImageCodeException;
+import com.my.security.vaidata.code.ValidataCode;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -32,12 +35,12 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * InitializingBean 就是所有配置都已经读取完毕并且赋值之后进行执行
- * 
+ * 短信验证 放在过滤器前面
  * @author Administrator
  *
  */
 @Slf4j
-public class ImageCodeFilter extends OncePerRequestFilter implements InitializingBean {
+public class SmsValidataFilter extends OncePerRequestFilter implements InitializingBean {
 
 	RequestCache requestCache = new HttpSessionRequestCache();
 	SessionStrategy strategy = new HttpSessionSessionStrategy();
@@ -60,11 +63,11 @@ public class ImageCodeFilter extends OncePerRequestFilter implements Initializin
 	public void afterPropertiesSet() throws ServletException {
 		super.afterPropertiesSet();
 		String[] configUrl = StringUtils
-				.splitByWholeSeparatorPreserveAllTokens(securityProperties.getCode().getImage().getUrl(), ",");
+				.splitByWholeSeparatorPreserveAllTokens(securityProperties.getCode().getSmscode().getUrl(), ",");
 		if (configUrl != null && configUrl.length != 0)
 			Arrays.stream(configUrl).sorted().forEach(e -> setUrl.add(e));
 		// 登录验证必须得图形验证码验证
-		setUrl.add("/authentication/form");
+		setUrl.add("/authentication/mobile");
 		setUrl.stream().forEach(e -> log.info("加载图片验证码连接url:{}", e));
 	}
 
@@ -74,13 +77,12 @@ public class ImageCodeFilter extends OncePerRequestFilter implements Initializin
 		// SavedRequest saverequest = requestCache.getRequest(request, response);
 		// String url = saverequest.getRedirectUrl();
 		// log.info("saveRequest get Url:{}", url);
-		log.info("request get UrI:{}", request.getRequestURI());
 		boolean action = Boolean.FALSE;
 		action = setUrl.stream().filter(e -> pathMatcher.match(e, request.getRequestURI())).findFirst().isPresent();
 		// 获取当前请求连接
 		if (action) {
 			try {
-				validataImageCode(request, response);
+				validataSmsCode(request, response);
 			} catch (ImageCodeException e) {
 				authenticationFailureHandler.onAuthenticationFailure(request, response, e);
 				return;
@@ -90,31 +92,31 @@ public class ImageCodeFilter extends OncePerRequestFilter implements Initializin
 
 	}
 
-	private void validataImageCode(HttpServletRequest request, HttpServletResponse response)
+	private void validataSmsCode(HttpServletRequest request, HttpServletResponse response)
 			throws ServletRequestBindingException {
 
-		ImageCode imageCode = (ImageCode) strategy.getAttribute(new ServletWebRequest(request),
-				CodeContant.SESSION_KEY_FIX+"image".toUpperCase());
+		ValidataCode imageCode = (ValidataCode) strategy.getAttribute(new ServletWebRequest(request),
+				CodeContant.SESSION_KEY_FIX+"sms".toUpperCase());
 		if (imageCode == null)
 			throw new ImageCodeException("验证码不存在");
 
-		log.info("getParameter get Code:{}", request.getParameter("imageCode"));
+		log.info("getParameter get Code:{}", request.getParameter("smsCode"));
 
-		String code = ServletRequestUtils.getStringParameter(request, "imageCode");
+		String code = ServletRequestUtils.getStringParameter(request, "smsCode");
 
 		if (StringUtils.isBlank(code))
 			throw new ImageCodeException("请输入验证码");
 
 		// 是否已过期
 		if (imageCode.isExpire()) {
-			strategy.removeAttribute(new ServletWebRequest(request),CodeContant.SESSION_KEY_FIX+"image".toUpperCase());
+			strategy.removeAttribute(new ServletWebRequest(request), CodeContant.SESSION_KEY_FIX+"sms".toUpperCase());
 			throw new ImageCodeException("该验证码已过期");
 		}
 
 		if (!StringUtils.equals(imageCode.getCode(), code))
 			throw new ImageCodeException("请输入正确的验证码");
 
-		strategy.removeAttribute(new ServletWebRequest(request),CodeContant.SESSION_KEY_FIX+"image".toUpperCase());
+		strategy.removeAttribute(new ServletWebRequest(request), CodeContant.SESSION_KEY_FIX+"sms".toUpperCase());
 	}
 
 }

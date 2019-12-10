@@ -13,6 +13,8 @@ import org.springframework.web.context.request.ServletWebRequest;
  *
  */
 public interface ValidataProcessor {
+	
+	String SESSION_KEY_FIX = "SESSION_KEY_FOR_CODE_";
 
 	/**
 	 *  验证码建立和发送

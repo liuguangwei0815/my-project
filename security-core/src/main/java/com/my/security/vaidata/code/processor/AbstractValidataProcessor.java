@@ -10,11 +10,13 @@ import org.springframework.social.connect.web.SessionStrategy;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.context.request.ServletWebRequest;
 
-import com.my.security.vaidata.code.CodeContant;
 import com.my.security.vaidata.code.ImageCodeException;
 import com.my.security.vaidata.code.ValidataCode;
 import com.my.security.vaidata.code.ValidataCodeGennerator;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public abstract class AbstractValidataProcessor<C extends ValidataCode> implements ValidataProcessor {
 	
 	@Autowired
@@ -32,15 +34,23 @@ public abstract class AbstractValidataProcessor<C extends ValidataCode> implemen
 	protected abstract void send(ServletWebRequest request, C code) throws ServletRequestBindingException, IOException;
 
 	private void save(ServletWebRequest request, C code) {
-		strategy.setAttribute(request, CodeContant.SESSIONKEY, code.getCode());
+		strategy.setAttribute(request, getSessionKey(request), code);
+	}
+
+	private String getSessionKey(ServletWebRequest request) {
+		return SESSION_KEY_FIX+getType(request).toUpperCase();
 	}
 
 	@SuppressWarnings("unchecked")
 	protected C gennerator(ServletWebRequest request) throws ServletRequestBindingException {
-		String type = StringUtils.substringBefore(getClass().getSimpleName(), "ValidataProcessor");
-		ValidataCodeGennerator gennertor = getGennerTypeByType(type);
+		ValidataCodeGennerator gennertor = getGennerTypeByType(getType(request));
 		return (C) gennertor.createImageCode(request);
 	}
+	
+	public String getType(ServletWebRequest request) {
+		 return StringUtils.substringBefore(getClass().getSimpleName(), "ValidataProcessor");
+	}
+	
 	
 	public ValidataCodeGennerator getGennerTypeByType(String type) {
 		String  beanName = type.trim().toLowerCase()+ValidataCodeGennerator.class.getSimpleName();

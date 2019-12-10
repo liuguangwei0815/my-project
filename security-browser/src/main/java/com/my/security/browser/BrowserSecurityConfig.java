@@ -17,6 +17,8 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import com.my.security.browser.authentication.MyAuthenticationFailHandler;
 import com.my.security.browser.authentication.MyAuthenticationSuccessHandler;
 import com.my.security.properites.SecurityProperties;
+import com.my.security.sms.authentication.SmsAuthenticationConfig;
+import com.my.security.sms.authentication.SmsValidataFilter;
 import com.my.security.vaidata.code.ImageCodeFilter;
 
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +39,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 	private UserDetailsService userDetailsService;
 	@Autowired
 	private DataSource dataSource;
+	@Autowired
+	private SmsAuthenticationConfig smsAuthenticationConfig;
 	
 	
 	@Override
@@ -47,9 +51,16 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 		imageCodeFilter.setSecurityProperties(securityProperties);
 		imageCodeFilter.afterPropertiesSet();
 		
+		//短信验证码校验过滤器
+		SmsValidataFilter smsimageCodeFilter = new SmsValidataFilter();
+		smsimageCodeFilter.setAuthenticationFailureHandler(myAuthenticationFailHandler);
+		smsimageCodeFilter.setSecurityProperties(securityProperties);
+		smsimageCodeFilter.afterPropertiesSet();
+		
 		log.info("获取配置文件的登录页面:{}", securityProperties.getBrowser().getLoginpage());
 		// 认证方式
 		http.addFilterBefore(imageCodeFilter, UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(smsimageCodeFilter, UsernamePasswordAuthenticationFilter.class);
 		http.formLogin()
 				// basic 认证
 				// http.httpBasic()
@@ -71,7 +82,9 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 						securityProperties.getBrowser().getLoginpage()
 						).permitAll()
 				//.antMatchers(getUrlaArr()).permitAll()
-				.anyRequest().authenticated().and().csrf().disable();
+				.anyRequest().authenticated().and().csrf().disable()
+				//追加配置
+				.apply(smsAuthenticationConfig);
 		//记住我
 		http.rememberMe()
 		.tokenRepository(persistentTokenRepository())
