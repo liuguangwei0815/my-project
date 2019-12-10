@@ -1,11 +1,7 @@
 package com.my.security.browser;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.sql.DataSource;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
@@ -67,11 +63,19 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 				.failureHandler(myAuthenticationFailHandler)
 				.and()
 				// 授权
-				.authorizeRequests().antMatchers("/authentication/require").permitAll().antMatchers(getUrlaArr())
-				.permitAll().anyRequest().authenticated().and().csrf().disable();
+				.authorizeRequests().antMatchers(
+						"/authentication/require",
+						"/error",
+						"/mycode/*",
+						"/authentication/mobile",
+						securityProperties.getBrowser().getLoginpage()
+						).permitAll()
+				//.antMatchers(getUrlaArr()).permitAll()
+				.anyRequest().authenticated().and().csrf().disable();
 		//记住我
 		http.rememberMe()
 		.tokenRepository(persistentTokenRepository())
+		.tokenValiditySeconds(securityProperties.getBrowser().getCookiesInvalidataTimes())
 		.userDetailsService(userDetailsService);
 
 		// http.antMatcher("/**").authorizeRequests().anyRequest().permitAll();
@@ -86,21 +90,6 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 		//repo.setCreateTableOnStartup(true);
 		return repo;
 	}
-	
 
-	// 获取配置文件的登录连接页面
-	private String[] getUrlaArr() {
-		List<String> loginUrl = new ArrayList<String>();
-		loginUrl.add("/login-simple.html");
-		loginUrl.add("/error");
-		loginUrl.add("/image/code");
-		if (securityProperties.getBrowser() != null
-				&& StringUtils.isNotBlank(securityProperties.getBrowser().getLoginpage())
-				&& !StringUtils.equals("/login-simple.html", securityProperties.getBrowser().getLoginpage())) {
-			loginUrl.add(securityProperties.getBrowser().getLoginpage());
-		}
-		String[] urlArr = new String[loginUrl.size()];
-		return loginUrl.toArray(urlArr);
-	}
 
 }

@@ -13,18 +13,24 @@ import com.my.security.properites.SecurityProperties;
  *
  */
 @Configuration
-public class ImageCodeGenneratorConfig {
+public class CodeGenneratorConfig {
 	
 	@Autowired
 	private  SecurityProperties securityProperties;
 	
 	
-	@Bean
-	@ConditionalOnMissingBean(name = "imageCodeGennerator")
-	public ImageCodeGennerator imageCodeGennerator() {
+	@Bean("imageValidataCodeGennerator")
+	@ConditionalOnMissingBean(name = "imageValidataCodeGennerator")
+	public ValidataCodeGennerator imageCodeGennerator() {
 		ImageCodeGenneratorImpl icg = new ImageCodeGenneratorImpl();
 		icg.setSecurityProperties(securityProperties);
 		return icg;
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(SmsSender.class)
+	public SmsSender smsCodeGennerator() {
+		return new SmsDefaultSenderImpl();
 	}
 	
 

@@ -3,26 +3,26 @@ package com.my.security.vaidata.code;
 import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@AllArgsConstructor
-public class ImageCode {
+public class ImageCode extends ValidataCode{
 
-	private String code;
+	@Setter
+	@Getter
 	private BufferedImage image;
-	private LocalDateTime localDateTime;
 
-	public ImageCode(String code, BufferedImage image, int expireSecode) {
-		super();
-		this.code = code;
+	public ImageCode(String code,BufferedImage image, int expireSecode) {
+		super(code, expireSecode);
 		this.image = image;
-		this.localDateTime = LocalDateTime.now().plusSeconds(expireSecode);
 	}
 
-	public boolean isExpire() {
-		return LocalDateTime.now().isAfter(this.localDateTime);
+	public ImageCode(String code, BufferedImage image,LocalDateTime localDateTime) {
+		super(code, localDateTime);
+		this.image = image;
 	}
+	
+	
+
 
 }

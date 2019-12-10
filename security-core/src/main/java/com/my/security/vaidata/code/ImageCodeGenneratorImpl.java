@@ -9,11 +9,9 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.ServletRequestUtils;
+import org.springframework.web.context.request.ServletWebRequest;
 
 import com.my.security.properites.SecurityProperties;
 
@@ -24,18 +22,18 @@ import lombok.Data;
  *
  */
 @Data
-public class ImageCodeGenneratorImpl implements ImageCodeGennerator {
+public class ImageCodeGenneratorImpl implements ValidataCodeGennerator {
 
 	
 	private SecurityProperties securityProperties;
 	
 	@Override
-	public ImageCode createImageCode(HttpServletRequest request, HttpServletResponse response)
+	public ImageCode createImageCode(ServletWebRequest ruqest)
 			throws ServletRequestBindingException, NumberFormatException {
 
-		int width = ServletRequestUtils.getIntParameter(request, "width",
+		int width = ServletRequestUtils.getIntParameter(ruqest.getRequest(), "width",
 				securityProperties.getCode().getImage().getWidth());
-		int height = ServletRequestUtils.getIntParameter(request, "height",
+		int height = ServletRequestUtils.getIntParameter(ruqest.getRequest(), "height",
 				securityProperties.getCode().getImage().getHeight());
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		Graphics g = image.getGraphics();

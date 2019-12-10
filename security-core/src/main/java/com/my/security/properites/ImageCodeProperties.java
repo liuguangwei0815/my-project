@@ -1,14 +1,19 @@
 package com.my.security.properites;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class ImageCodeProperties {
+public class ImageCodeProperties  extends SmsCodeProperties{
 
+	@Setter
+	@Getter
 	private int width = 67;
+	@Setter
+	@Getter
 	private int height = 23;
-	private int length = 4;
-	private int exprireTime = 60;
-	private String url;
+	//一般图片验证码是4位，短信一般是6位，为了默认设置，处理如下
+	public  ImageCodeProperties() {
+		this.setLength(4);
+	}
 
 }

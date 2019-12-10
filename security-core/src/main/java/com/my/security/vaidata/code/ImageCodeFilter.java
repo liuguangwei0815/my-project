@@ -96,7 +96,7 @@ public class ImageCodeFilter extends OncePerRequestFilter implements Initializin
 			throws ServletRequestBindingException {
 
 		ImageCode imageCode = (ImageCode) strategy.getAttribute(new ServletWebRequest(request),
-				ImageCodeContant.SESSIONKEY);
+				CodeContant.SESSIONKEY);
 		if (imageCode == null)
 			throw new ImageCodeException("验证码不存在");
 
@@ -109,14 +109,14 @@ public class ImageCodeFilter extends OncePerRequestFilter implements Initializin
 
 		// 是否已过期
 		if (imageCode.isExpire()) {
-			strategy.removeAttribute(new ServletWebRequest(request), ImageCodeContant.SESSIONKEY);
+			strategy.removeAttribute(new ServletWebRequest(request), CodeContant.SESSIONKEY);
 			throw new ImageCodeException("该验证码已过期");
 		}
 
 		if (!StringUtils.equals(imageCode.getCode(), code))
 			throw new ImageCodeException("请输入正确的验证码");
 
-		strategy.removeAttribute(new ServletWebRequest(request), ImageCodeContant.SESSIONKEY);
+		strategy.removeAttribute(new ServletWebRequest(request), CodeContant.SESSIONKEY);
 	}
 
 }
