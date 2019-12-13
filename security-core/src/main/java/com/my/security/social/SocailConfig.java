@@ -20,7 +20,9 @@ public class SocailConfig extends SocialConfigurerAdapter {
 
 	@Override
 	public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
-		return new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, Encryptors.noOpText());
+		JdbcUsersConnectionRepository jcr = new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, Encryptors.noOpText());
+		jcr.setTablePrefix("socail_");
+		return jcr;
 	}
 	
 }
