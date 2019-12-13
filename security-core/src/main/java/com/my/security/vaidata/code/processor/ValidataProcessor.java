@@ -24,4 +24,6 @@ public interface ValidataProcessor {
 	 */
 	public void create(ServletWebRequest request) throws ServletRequestBindingException, IOException;
 
+	void validataSmsCode(ServletWebRequest request) throws ServletRequestBindingException;
+
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.my.security.vaidata.code.ImageCodeException;
+import com.my.security.vaidata.code.enums.CodeValidataType;
 
 /**
  * 查找实际处理对象
@@ -19,6 +20,9 @@ public class ValidataProcessorHolder {
 	@Autowired
 	private Map<String,ValidataProcessor> validataProcessors;
 	
+	public ValidataProcessor findValidataProcessorByType(CodeValidataType type) {
+		return findValidataProcessorByType(type.toString());
+	}
 	
 	public ValidataProcessor findValidataProcessorByType(String type) {
 		String  beanName = type.trim().toLowerCase()+ValidataProcessor.class.getSimpleName();

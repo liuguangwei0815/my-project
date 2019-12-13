@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
@@ -18,8 +17,8 @@ import com.my.security.browser.authentication.MyAuthenticationFailHandler;
 import com.my.security.browser.authentication.MyAuthenticationSuccessHandler;
 import com.my.security.properites.SecurityProperties;
 import com.my.security.sms.authentication.SmsAuthenticationConfig;
-import com.my.security.sms.authentication.SmsValidataFilter;
-import com.my.security.vaidata.code.ImageCodeFilter;
+import com.my.security.vaidata.code.SecurityContant;
+import com.my.security.vaidata.code.SmsAndImageValidataFilterConfig;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,33 +40,30 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 	private DataSource dataSource;
 	@Autowired
 	private SmsAuthenticationConfig smsAuthenticationConfig;
+	@Autowired
+	private SmsAndImageValidataFilterConfig smsAndImageValidataFilterConfig;
 	
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		ImageCodeFilter imageCodeFilter = new ImageCodeFilter();
-		imageCodeFilter.setAuthenticationFailureHandler(myAuthenticationFailHandler);
-		imageCodeFilter.setSecurityProperties(securityProperties);
-		imageCodeFilter.afterPropertiesSet();
+//		SmsAndImageValidataFilter codeFilter = new SmsAndImageValidataFilter();
+//		codeFilter.afterPropertiesSet();
 		
-		//短信验证码校验过滤器
-		SmsValidataFilter smsimageCodeFilter = new SmsValidataFilter();
-		smsimageCodeFilter.setAuthenticationFailureHandler(myAuthenticationFailHandler);
-		smsimageCodeFilter.setSecurityProperties(securityProperties);
-		smsimageCodeFilter.afterPropertiesSet();
 		
 		log.info("获取配置文件的登录页面:{}", securityProperties.getBrowser().getLoginpage());
-		// 认证方式
-		http.addFilterBefore(imageCodeFilter, UsernamePasswordAuthenticationFilter.class);
-		http.addFilterBefore(smsimageCodeFilter, UsernamePasswordAuthenticationFilter.class);
+		//短信验证码校验过滤器配置
+		http.apply(smsAndImageValidataFilterConfig);
+		//手机短信登录授权
+		http.apply(smsAuthenticationConfig);
+		// 认证方式（用户密码登录）
 		http.formLogin()
 				// basic 认证
 				// http.httpBasic()
-				// 错误之后的请求访问路径
-				.loginPage("/authentication/require")
+				// 需要认证之后的请求访问路径
+				.loginPage(SecurityContant.AUTHENTICATION_REQUIRE)
 				// 提交登录页认证的设置 action=""
-				.loginProcessingUrl("/authentication/form")
+				.loginProcessingUrl(SecurityContant.AUTHENTICATION_FORM)
 				//登录成功之后的处理
 				.successHandler(myAuthenticationSuccessHandler)
 				//登录失败之后的处理
@@ -75,16 +71,14 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 				// 授权
 				.authorizeRequests().antMatchers(
-						"/authentication/require",
-						"/error",
-						"/mycode/*",
-						"/authentication/mobile",
+						SecurityContant.AUTHENTICATION_REQUIRE,
+						SecurityContant.ERROR,
+						SecurityContant.MYCODE,
+						SecurityContant.AUTHENTICATION_MOBILE,
 						securityProperties.getBrowser().getLoginpage()
 						).permitAll()
 				//.antMatchers(getUrlaArr()).permitAll()
-				.anyRequest().authenticated().and().csrf().disable()
-				//追加配置
-				.apply(smsAuthenticationConfig);
+				.anyRequest().authenticated().and().csrf().disable();
 		//记住我
 		http.rememberMe()
 		.tokenRepository(persistentTokenRepository())
