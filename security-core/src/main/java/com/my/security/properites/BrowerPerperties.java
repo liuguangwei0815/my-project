@@ -12,5 +12,8 @@ public class BrowerPerperties {
 	private LoginType loginType = LoginType.JSON;
 	
 	private int cookiesInvalidataTimes = 3600;//一个小时
+	
+	private String signUp = "/simple_singUp.html";
+	
 
 }

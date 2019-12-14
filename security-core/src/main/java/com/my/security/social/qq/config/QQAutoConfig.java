@@ -11,7 +11,7 @@ import org.springframework.social.connect.ConnectionFactory;
 import com.my.security.properites.QQProperties;
 import com.my.security.properites.SecurityProperties;
 import com.my.security.social.SocialAutoConfigurerAdapter;
-import com.my.security.social.qq.connet.QQConnectFactory;
+import com.my.security.social.qq.connet.QQFactory;
 
 /**
  * @author Administrator
@@ -29,7 +29,7 @@ public class QQAutoConfig extends SocialAutoConfigurerAdapter{
 	@Override
 	protected ConnectionFactory<?> createConnectionFactory() {
 		QQProperties qq = securityProperties.getSocail().getQq();
-		return new QQConnectFactory(qq.getProviderId(), qq.getAppId(), qq.getAppSecret());
+		return new QQFactory(qq.getProviderId(), qq.getAppId(), qq.getAppSecret());
 	}
 
 	

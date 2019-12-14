@@ -44,6 +44,12 @@ public class SecurityContant {
 	public static String SMSCODE = "smsCode";
 	
 	
+	/**
+	 * 注册
+	 */
+	public static String USER_REGIST = "/user/regist";
+	
+	
 	
 	
 	

@@ -11,9 +11,9 @@ import com.my.security.social.qq.api.QQ;
  * @author Administrator
  *
  */
-public class QQConnectFactory extends OAuth2ConnectionFactory<QQ> {
+public class QQFactory extends OAuth2ConnectionFactory<QQ> {
 
-	public QQConnectFactory(String providerId,String appId,String appSecret) {
+	public QQFactory(String providerId,String appId,String appSecret) {
 		super(providerId, new QQServiceProvider(appId, appSecret), new QQAdptor());
 	}
 

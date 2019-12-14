@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.social.security.SpringSocialConfigurer;
 
 import com.my.security.browser.authentication.MyAuthenticationFailHandler;
 import com.my.security.browser.authentication.MyAuthenticationSuccessHandler;
@@ -42,6 +43,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 	private SmsAuthenticationConfig smsAuthenticationConfig;
 	@Autowired
 	private SmsAndImageValidataFilterConfig smsAndImageValidataFilterConfig;
+    @Autowired
+    private SpringSocialConfigurer springSocialConfigurer;
 	
 	
 	@Override
@@ -56,6 +59,9 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.apply(smsAndImageValidataFilterConfig);
 		//手机短信登录授权
 		http.apply(smsAuthenticationConfig);
+		//QQ登录
+		http.apply(springSocialConfigurer);
+		
 		// 认证方式（用户密码登录）
 		http.formLogin()
 				// basic 认证
@@ -75,7 +81,9 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 						SecurityContant.ERROR,
 						SecurityContant.MYCODE,
 						SecurityContant.AUTHENTICATION_MOBILE,
-						securityProperties.getBrowser().getLoginpage()
+						SecurityContant.USER_REGIST,
+						securityProperties.getBrowser().getLoginpage(),
+						securityProperties.getBrowser().getSignUp()
 						).permitAll()
 				//.antMatchers(getUrlaArr()).permitAll()
 				.anyRequest().authenticated().and().csrf().disable();

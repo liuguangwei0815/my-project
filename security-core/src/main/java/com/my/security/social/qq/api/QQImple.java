@@ -37,7 +37,7 @@ public class QQImple extends AbstractOAuth2ApiBinding implements QQ {
 		//获取OpenID
 		String result = this.getRestTemplate().getForObject(String.format(GET_QQ_OPENID_RIL, accessToken), String.class);
 		log.info("发送请求获取OpenID，结果为：{}",result);
-		this.openId = StringUtils.substringBetween(result, "\"openid\":", "}");
+		this.openId = StringUtils.substringBetween(result, "\"openid\":\"", "\"}");
 	}
 	
 	
@@ -53,9 +53,11 @@ public class QQImple extends AbstractOAuth2ApiBinding implements QQ {
 		String result = this.getRestTemplate().getForObject(String.format(GET_QQ_USERINFOU_RIL,this.appId ,this.openId), String.class);
 		log.info("发送请求获取用户信息，结果为：{}",result);
 		try {
-			return mapper.readValue(result, QQUserInfo.class);
+			QQUserInfo userinfo = mapper.readValue(result, QQUserInfo.class);
+			userinfo.setOpenId(this.openId);
+			return userinfo;
 		} catch (Exception e) {
-			e.printStackTrace();
+			e.printStackTrace(); 
 		}
 		return null;
 	}

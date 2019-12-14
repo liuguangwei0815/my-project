@@ -16,6 +16,9 @@ public class QQProperties{
 	private String appSecret;
 	
 	//提供商标识
-	private String providerId = "qq";
+	private String providerId = "callback.do";
+	
+	//social 默认拦截地址
+	private String filterProcessesUrl = "/auth";
 
 }
