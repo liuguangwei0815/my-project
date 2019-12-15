@@ -10,12 +10,12 @@ import org.springframework.social.UserIdSource;
 import org.springframework.social.config.annotation.EnableSocial;
 import org.springframework.social.config.annotation.SocialConfigurerAdapter;
 import org.springframework.social.connect.ConnectionFactoryLocator;
+import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.social.security.AuthenticationNameUserIdSource;
 import org.springframework.social.security.SpringSocialConfigurer;
-import org.springframework.web.context.request.ServletWebRequest;
 
 import com.my.security.properites.SecurityProperties;
 
@@ -30,12 +30,20 @@ public class SocailConfig extends SocialConfigurerAdapter {
 	//也可以当做参数注进来
 //	@Autowired
 //	private ConnectionFactoryLocator connectionFactoryLocator;
-
+	
+	@Autowired(required = false)
+    private ConnectionSignUp connectionSignUp; 
+	
+	
 	@Override
 	public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
 		JdbcUsersConnectionRepository jcr = new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator,
 				Encryptors.noOpText());
 		jcr.setTablePrefix("socail_");
+		//这个有客户端自己实现
+		if(connectionSignUp!=null) {
+			jcr.setConnectionSignUp(connectionSignUp);
+		}
 		return jcr;
 	}
 
