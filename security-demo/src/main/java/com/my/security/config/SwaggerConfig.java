@@ -41,6 +41,9 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
 	        //公共部分自带登录
 	        registry.addResourceHandler("login-simple.html")
             .addResourceLocations("classpath:/resources/");
+	        //session 失效页面
+	        registry.addResourceHandler("sessioninvalid.html")
+            .addResourceLocations("classpath:/resources/session/");
 	        
 	        
 	        

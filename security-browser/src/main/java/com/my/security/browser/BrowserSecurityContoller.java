@@ -80,6 +80,5 @@ public class BrowserSecurityContoller {
 		return userInfo;
 	}
 
-	
 
 }

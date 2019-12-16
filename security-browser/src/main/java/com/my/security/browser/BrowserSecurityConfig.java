@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.session.InvalidSessionStrategy;
+import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 import org.springframework.social.security.SpringSocialConfigurer;
 
 import com.my.security.browser.authentication.MyAuthenticationFailHandler;
@@ -45,6 +47,11 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 	private SmsAndImageValidataFilterConfig smsAndImageValidataFilterConfig;
     @Autowired
     private SpringSocialConfigurer springSocialConfigurer;
+    @Autowired
+    private InvalidSessionStrategy sessionExprireStategy;
+    @Autowired
+    private SessionInformationExpiredStrategy sessionConcurrentStategy;
+    
 	
 	
 	@Override
@@ -83,7 +90,9 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 						SecurityContant.AUTHENTICATION_MOBILE,
 						SecurityContant.USER_REGIST,
 						securityProperties.getBrowser().getLoginpage(),
-						securityProperties.getBrowser().getSignUp()
+						securityProperties.getBrowser().getSignUp(),
+						securityProperties.getBrowser().getSessionInvalideUrl()+".html",
+						securityProperties.getBrowser().getSessionInvalideUrl()+".json"
 						).permitAll()
 				//.antMatchers(getUrlaArr()).permitAll()
 				.anyRequest().authenticated().and().csrf().disable();
@@ -92,7 +101,14 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 		.tokenRepository(persistentTokenRepository())
 		.tokenValiditySeconds(securityProperties.getBrowser().getCookiesInvalidataTimes())
 		.userDetailsService(userDetailsService);
-
+		//session失效处理跳转连接
+		http.sessionManagement().invalidSessionStrategy(sessionExprireStategy)
+		//sessin并发处理
+		.maximumSessions(securityProperties.getBrowser().getMaximumSessions())
+		//是否覆盖之旧的登录状态 如果达到了最大的session登录次数
+		.maxSessionsPreventsLogin(securityProperties.getBrowser().isMaxSessionsPreventsLogin())
+		//并发处理后的处理器
+		.expiredSessionStrategy(sessionConcurrentStategy);
 		// http.antMatcher("/**").authorizeRequests().anyRequest().permitAll();
 
 	}

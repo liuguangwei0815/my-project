@@ -49,7 +49,10 @@ public class SecurityContant {
 	 */
 	public static String USER_REGIST = "/user/regist";
 	
-	
+	/**
+	 * session失效连接
+	 */
+	public static String SESSON_INVALID = "/sessioninvalid";
 	
 	
 	
