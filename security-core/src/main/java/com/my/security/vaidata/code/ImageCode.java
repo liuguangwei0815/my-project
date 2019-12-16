@@ -8,6 +8,10 @@ import lombok.Setter;
 
 public class ImageCode extends ValidataCode{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4639969912602339802L;
 	@Setter
 	@Getter
 	private BufferedImage image;

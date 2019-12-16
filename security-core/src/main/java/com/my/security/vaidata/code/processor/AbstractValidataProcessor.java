@@ -36,7 +36,8 @@ public abstract class AbstractValidataProcessor<C extends ValidataCode> implemen
 	protected abstract void send(ServletWebRequest request, C code) throws ServletRequestBindingException, IOException;
 
 	private void save(ServletWebRequest request, C code) {
-		strategy.setAttribute(request, getSessionKey(request), code);
+		ValidataCode vcode = new ValidataCode(code.getCode(), code.getLocalDateTime());
+		strategy.setAttribute(request, getSessionKey(request), vcode);
 	}
 
 	private String getSessionKey(ServletWebRequest request) {

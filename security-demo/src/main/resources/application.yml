@@ -1,5 +1,5 @@
 server:
-  port: 7017
+  port: 7018
 #服务的名称
 spring:
   application:
