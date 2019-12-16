@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import com.my.security.browser.session.SessionConcurrentStategy;
 import com.my.security.browser.session.SessionExprireStategy;
+import com.my.security.browser.session.logout.SessionLogOutSuccessHandler;
 import com.my.security.properites.SecurityProperties;
 
 /**
@@ -30,6 +32,11 @@ public class BrowserSecurityBeanConfig {
 	@ConditionalOnMissingBean(name = "sessionExprireStategy")
 	public SessionExprireStategy sessionExprireStategy() {
 		return new  SessionExprireStategy(securityProperties.getBrowser().getSessionInvalideUrl());
+	}
+	@Bean
+	@ConditionalOnMissingBean(LogoutSuccessHandler.class)
+	public SessionLogOutSuccessHandler sessionLogOutSuccessHandler() {
+		return new SessionLogOutSuccessHandler(securityProperties.getBrowser().getSignOutUrl());
 	}
 	
 

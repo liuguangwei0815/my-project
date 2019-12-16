@@ -18,6 +18,7 @@ import org.springframework.social.security.SpringSocialConfigurer;
 
 import com.my.security.browser.authentication.MyAuthenticationFailHandler;
 import com.my.security.browser.authentication.MyAuthenticationSuccessHandler;
+import com.my.security.browser.session.logout.SessionLogOutSuccessHandler;
 import com.my.security.properites.SecurityProperties;
 import com.my.security.sms.authentication.SmsAuthenticationConfig;
 import com.my.security.vaidata.code.SecurityContant;
@@ -51,6 +52,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     private InvalidSessionStrategy sessionExprireStategy;
     @Autowired
     private SessionInformationExpiredStrategy sessionConcurrentStategy;
+    @Autowired
+    private SessionLogOutSuccessHandler sessionLogOutSuccessHandler;
     
 	
 	
@@ -68,7 +71,6 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.apply(smsAuthenticationConfig);
 		//QQ登录
 		http.apply(springSocialConfigurer);
-		
 		// 认证方式（用户密码登录）
 		http.formLogin()
 				// basic 认证
@@ -82,6 +84,12 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 				//登录失败之后的处理
 				.failureHandler(myAuthenticationFailHandler)
 				.and()
+				//配置退出登录的连接
+				.logout().logoutUrl("/signOut")
+				//退出登录的处理器，配置是json还是直接跳到一个页面
+				.logoutSuccessHandler(sessionLogOutSuccessHandler)
+				.deleteCookies("JSESSIONID")
+				.and()
 				// 授权
 				.authorizeRequests().antMatchers(
 						SecurityContant.AUTHENTICATION_REQUIRE,
@@ -92,7 +100,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 						securityProperties.getBrowser().getLoginpage(),
 						securityProperties.getBrowser().getSignUp(),
 						securityProperties.getBrowser().getSessionInvalideUrl()+".html",
-						securityProperties.getBrowser().getSessionInvalideUrl()+".json"
+						securityProperties.getBrowser().getSessionInvalideUrl()+".json",
+						SecurityContant.DEMO_SIGNOUT
 						).permitAll()
 				//.antMatchers(getUrlaArr()).permitAll()
 				.anyRequest().authenticated().and().csrf().disable();

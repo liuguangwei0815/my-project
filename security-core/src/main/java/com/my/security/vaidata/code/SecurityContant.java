@@ -54,6 +54,8 @@ public class SecurityContant {
 	 */
 	public static String SESSON_INVALID = "/sessioninvalid";
 	
-	
-	
+	/**
+	 * 退出成功之后需要展示的页面
+	 */
+	public static String DEMO_SIGNOUT = "/demo-signOut.html";
 }

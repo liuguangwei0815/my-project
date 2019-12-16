@@ -9,6 +9,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
+import org.springframework.security.web.util.UrlUtils;
+import org.springframework.util.Assert;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,6 +32,7 @@ public class AbStractSessionInvalidStrategy {
 	private boolean isConncurrent = Boolean.FALSE;
 
 	public AbStractSessionInvalidStrategy(String destinationUrl) {
+		Assert.isTrue(UrlUtils.isValidRedirectUrl(destinationUrl), "url must start with '/' or with 'http(s)'");
 		this.destinationUrl = destinationUrl;
 	}
 
