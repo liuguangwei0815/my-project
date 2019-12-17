@@ -14,7 +14,7 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.my.security.browser.support.SimpleResponse;
+import com.my.security.support.SimpleResponse;
 
 public class SessionLogOutSuccessHandler implements LogoutSuccessHandler{
 	

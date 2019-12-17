@@ -1,4 +1,4 @@
-package com.my.security.browser.authentication;
+package com.my.security.authentication;
 
 import java.io.IOException;
 

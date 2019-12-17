@@ -53,6 +53,11 @@
 				<artifactId>security-browser</artifactId>
 				<version>${my.project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.my.security</groupId>
+				<artifactId>security-app</artifactId>
+				<version>${my.project.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

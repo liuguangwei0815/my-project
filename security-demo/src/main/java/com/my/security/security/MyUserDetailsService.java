@@ -33,7 +33,7 @@ public class MyUserDetailsService implements UserDetailsService , SocialUserDeta
 
 	private SocialUserDetails builUser(String userId) {
 		return new SocialUser(userId, passwordEncoder.encode("123456"), true, true, true, true,
-				AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+				AuthorityUtils.commaSeparatedStringToAuthorityList("admin,ROLE_USER"));
 	}
 
 }
