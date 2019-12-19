@@ -65,7 +65,7 @@ public class BrowserSecurityContoller {
 	
 
 	/**
-	 * 获取第三方信息controller
+	 * 获取第三方信息controller 用于绑定页面的展示
 	 * @param request
 	 * @return
 	 */

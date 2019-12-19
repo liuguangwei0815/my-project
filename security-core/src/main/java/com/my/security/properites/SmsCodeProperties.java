@@ -6,7 +6,7 @@ import lombok.Data;
 public class SmsCodeProperties {
 
 	private int length = 6;
-	private int exprireTime = 60;
+	private int exprireTime = 120;
 	private String url;
 
 }

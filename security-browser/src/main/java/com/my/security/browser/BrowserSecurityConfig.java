@@ -122,7 +122,10 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	}
 	
-	
+	/**
+	 * 这是记住我的持久化的配置
+	 * @return
+	 */
 	@Bean
 	public PersistentTokenRepository persistentTokenRepository() {
 		JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
