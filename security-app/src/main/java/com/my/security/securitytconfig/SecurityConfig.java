@@ -2,6 +2,9 @@ package com.my.security.securitytconfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,8 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
 @Slf4j
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	
+public class SecurityConfig  extends WebSecurityConfigurerAdapter {
+
 	@Autowired
 	private SecurityProperties securityProperties;
 	@Autowired
@@ -73,6 +76,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						).permitAll()
 				//.antMatchers(getUrlaArr()).permitAll()
 				.anyRequest().authenticated().and().csrf().disable();
+	}
+	
+	@Bean
+	public AuthenticationManager authenticationManager() throws Exception {
+		return super.authenticationManagerBean();
 	}
 	
 }
