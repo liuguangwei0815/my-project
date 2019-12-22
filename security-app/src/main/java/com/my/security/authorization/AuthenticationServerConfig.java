@@ -18,18 +18,13 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 @Configuration
 @EnableAuthorizationServer
 public class AuthenticationServerConfig extends AuthorizationServerConfigurerAdapter {
-
+//
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
-	
-	
-	
-	
 	
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
@@ -45,6 +40,7 @@ public class AuthenticationServerConfig extends AuthorizationServerConfigurerAda
 //		security.tokenKeyAccess("isAuthenticated()");
 //	}
 //
+//	
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		  clients.inMemory() // 使用in-memory存储
