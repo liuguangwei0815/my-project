@@ -21,6 +21,7 @@ public class SecurityProperties {
 	private BrowerPerperties browser = new BrowerPerperties();
 	private CodeProperties code = new CodeProperties();
 	private SocailPropertis socail = new SocailPropertis();
+	private Oauth2Properties oauth2  = new Oauth2Properties();
 	
 
 
