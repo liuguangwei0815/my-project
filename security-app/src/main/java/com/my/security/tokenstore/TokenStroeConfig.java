@@ -1,6 +1,7 @@
 package com.my.security.tokenstore;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +14,10 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import com.my.security.properites.SecurityProperties;
 import com.my.security.tokenstore.jwt.MyJwtEnharcer;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Configuration
+@Slf4j
 public class TokenStroeConfig {
 	
 	@Autowired
@@ -53,11 +57,13 @@ public class TokenStroeConfig {
 		@Bean
 		public JwtAccessTokenConverter jwtAccessTokenConverter() {
 			JwtAccessTokenConverter jwtConver = new JwtAccessTokenConverter();
+			log.info("jwt 秘钥:{}",securityProperties.getOauth2().getSigningKey());
 			jwtConver.setSigningKey(securityProperties.getOauth2().getSigningKey());
-			return new JwtAccessTokenConverter();
+			return jwtConver;
 		}
 		
 		@Bean
+		@ConditionalOnBean(value = TokenEnhancer.class)
 		public TokenEnhancer tokenEnhancer() {
 			return new MyJwtEnharcer();
 		}

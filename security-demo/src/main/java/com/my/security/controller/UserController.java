@@ -1,11 +1,13 @@
 package com.my.security.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,14 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.my.security.aspect.TimerAntiontation;
 import com.my.security.dto.ResultVo;
 import com.my.security.dto.User;
+import com.my.security.properites.SecurityProperties;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +50,8 @@ import springfox.documentation.annotations.ApiIgnore;
 public class UserController {
 	@Autowired
 	private ProviderSignInUtils providerSignInUtils;
+	@Autowired
+	private SecurityProperties securityProperties;
 	
 	
 	@PostMapping("/regist")
@@ -53,8 +64,15 @@ public class UserController {
 	}
 	
 	@GetMapping("/me")
-	public ResultVo meinfocreate(Authentication authentication) {
+	public ResultVo meinfocreate(Authentication authentication,HttpServletRequest request) throws Exception {
 		//return ResultVo.retSucc(SecurityContextHolder.getContext().getAuthentication());
+		String header = request.getHeader("Authorization");
+		String token = StringUtils.substringAfter(header, "bearer ");
+		log.info("获取jwt秘钥：{}",securityProperties.getOauth2().getSigningKey());
+		Claims claims = Jwts.parser().setSigningKey(securityProperties.getOauth2().getSigningKey().getBytes("UTF-8"))
+				.parseClaimsJws(token).getBody();
+		String enhancerValue = (String) claims.get("MyEnhancerInfo");
+		log.info("enhancerKey:{},enhancerValue:{}","MyEnhancerInfo",enhancerValue);
 		return  ResultVo.retSucc(authentication);
 	}
 

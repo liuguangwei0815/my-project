@@ -99,6 +99,8 @@ public class AuthenticationServerConfig extends AuthorizationServerConfigurerAda
 				.secret(passwordEncoder.encode(e.getClientSecert())) // client_secret
 				.authorizedGrantTypes("authorization_code", "password", "refresh_token") // 该client允许的授权类型
 				.accessTokenValiditySeconds(e.getAccessTokenValiditySeconds()).redirectUris(e.getRedirectUris())
+				//刷新令牌的过期时间
+				.refreshTokenValiditySeconds(28800)
 				.scopes("all"); // 允许的授权范围
 	}
 

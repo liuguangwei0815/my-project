@@ -23,9 +23,8 @@ public class MyJwtEnharcer implements TokenEnhancer {
 		Map<String,Object> info = new HashMap<>();
 		info.put("MyEnhancerInfo", "测试Enhancer");
 		
-		DefaultOAuth2AccessToken defaultOAuth2AccessToken = (DefaultOAuth2AccessToken)accessToken;
-		defaultOAuth2AccessToken.setAdditionalInformation(info);
-		return defaultOAuth2AccessToken;
+		((DefaultOAuth2AccessToken)accessToken).setAdditionalInformation(info);
+		return accessToken;
 	}
 
 }
