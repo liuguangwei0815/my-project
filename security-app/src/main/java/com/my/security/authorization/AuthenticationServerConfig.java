@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 
 import com.my.security.properites.ClientInfoProperties;
 import com.my.security.properites.SecurityProperties;
@@ -37,9 +38,15 @@ public class AuthenticationServerConfig extends AuthorizationServerConfigurerAda
 	private UserDetailsService userDetailsService;
 	@Autowired
 	private SecurityProperties securityProperties;
+	@Autowired
+	private TokenStore tokenStore;
 	
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+		
+		//配置token存储方式
+		endpoints.tokenStore(tokenStore);
+		//密码认证模式必须配置一下语句
 		endpoints.authenticationManager(authenticationManager).userDetailsService(userDetailsService);
 	}
 	
