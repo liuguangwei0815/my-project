@@ -1,0 +1,9 @@
+server:
+  port: 7019
+#服务的名称
+spring:
+  application:
+    name: security-authortiaction-server
+
+  
+ 

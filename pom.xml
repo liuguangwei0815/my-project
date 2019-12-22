@@ -86,5 +86,8 @@
 		<module>security-browser</module>
 		<module>security-app</module>
 		<module>security-demo</module>
+		<module>security-authorization-server</module>
+		<module>security-sso-client1</module>
+		<module>security-sso-client2</module>
 	</modules>
 </project>

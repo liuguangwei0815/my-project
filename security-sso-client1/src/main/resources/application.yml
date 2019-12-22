@@ -1,0 +1,9 @@
+server:
+  port: 7020
+#服务的名称
+spring:
+  application:
+    name: security-sso-client1
+
+  
+ 

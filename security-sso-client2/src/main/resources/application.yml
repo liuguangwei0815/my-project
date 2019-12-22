@@ -1,0 +1,9 @@
+server:
+  port: 7021
+#服务的名称
+spring:
+  application:
+    name: security-sso-client2
+
+  
+ 
