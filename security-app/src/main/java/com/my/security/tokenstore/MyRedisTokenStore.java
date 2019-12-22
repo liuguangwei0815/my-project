@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.oauth2.common.ExpiringOAuth2RefreshToken;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
+@ConditionalOnProperty(prefix = "self.security.oath2.token",name = "storeType",havingValue = "redis")
 public class MyRedisTokenStore implements TokenStore{
 
 
