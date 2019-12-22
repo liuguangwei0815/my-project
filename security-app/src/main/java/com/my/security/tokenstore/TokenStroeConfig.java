@@ -5,11 +5,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 import com.my.security.properites.SecurityProperties;
+import com.my.security.tokenstore.jwt.MyJwtEnharcer;
 
 @Configuration
 public class TokenStroeConfig {
@@ -53,6 +55,11 @@ public class TokenStroeConfig {
 			JwtAccessTokenConverter jwtConver = new JwtAccessTokenConverter();
 			jwtConver.setSigningKey(securityProperties.getOauth2().getSigningKey());
 			return new JwtAccessTokenConverter();
+		}
+		
+		@Bean
+		public TokenEnhancer tokenEnhancer() {
+			return new MyJwtEnharcer();
 		}
 		
 		

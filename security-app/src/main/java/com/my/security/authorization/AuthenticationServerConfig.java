@@ -1,6 +1,8 @@
 package com.my.security.authorization;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
@@ -44,6 +48,8 @@ public class AuthenticationServerConfig extends AuthorizationServerConfigurerAda
 	private TokenStore tokenStore;
 	@Autowired(required = false)
 	private JwtAccessTokenConverter jwtAccessTokenConverter;
+	@Autowired(required = false)
+	private TokenEnhancer tokenEnhancer;
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
@@ -52,8 +58,18 @@ public class AuthenticationServerConfig extends AuthorizationServerConfigurerAda
 		endpoints.tokenStore(tokenStore);
 		// 密码认证模式必须配置一下语句
 		endpoints.authenticationManager(authenticationManager).userDetailsService(userDetailsService);
-		if (jwtAccessTokenConverter != null)
+		if (jwtAccessTokenConverter != null && tokenEnhancer!=null) {
+			
+			TokenEnhancerChain chain = new TokenEnhancerChain();
+			List<TokenEnhancer> delegates = new ArrayList<>();
+			//将tokenenhancer 给jwt 生产 加进一个加强链
+			delegates.add(tokenEnhancer);
+			delegates.add(jwtAccessTokenConverter);
+			chain.setTokenEnhancers(delegates);
+			
+			endpoints.tokenEnhancer(chain);
 			endpoints.accessTokenConverter(jwtAccessTokenConverter);
+		}
 	}
 
 //
