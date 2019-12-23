@@ -91,16 +91,16 @@
 
 
 		<!-- 自有项目 -->
-<!-- 		<dependency>
-			<groupId>com.my.security</groupId>
-			<artifactId>security-browser</artifactId>
-		</dependency> -->
-		
-			<!-- 自有项目 -->
 		<dependency>
 			<groupId>com.my.security</groupId>
+			<artifactId>security-browser</artifactId>
+		</dependency> 
+		
+			<!-- 自有项目 -->
+	<!-- 	<dependency>
+			<groupId>com.my.security</groupId>
 			<artifactId>security-app</artifactId>
-		</dependency>
+		</dependency> -->
 		
 	</dependencies>
 

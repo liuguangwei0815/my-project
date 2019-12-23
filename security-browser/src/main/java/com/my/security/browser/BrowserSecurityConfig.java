@@ -16,6 +16,7 @@ import org.springframework.security.web.session.InvalidSessionStrategy;
 import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 import org.springframework.social.security.SpringSocialConfigurer;
 
+import com.my.security.authrority.AuthorizationProviderManager;
 import com.my.security.browser.authentication.MyAuthenticationFailHandler;
 import com.my.security.browser.authentication.MyAuthenticationSuccessHandler;
 import com.my.security.browser.session.logout.SessionLogOutSuccessHandler;
@@ -54,6 +55,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     private SessionInformationExpiredStrategy sessionConcurrentStategy;
     @Autowired
     private SessionLogOutSuccessHandler sessionLogOutSuccessHandler;
+    @Autowired
+    private  AuthorizationProviderManager authorizationProviderManager;
     
 	
 	
@@ -89,22 +92,29 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 				//退出登录的处理器，配置是json还是直接跳到一个页面
 				.logoutSuccessHandler(sessionLogOutSuccessHandler)
 				.deleteCookies("JSESSIONID")
-				.and()
-				// 授权
-				.authorizeRequests().antMatchers(
-						SecurityContant.AUTHENTICATION_REQUIRE,
-						SecurityContant.ERROR,
-						SecurityContant.MYCODE,
-						SecurityContant.AUTHENTICATION_MOBILE,
-						SecurityContant.USER_REGIST,
-						securityProperties.getBrowser().getLoginpage(),
-						securityProperties.getBrowser().getSignUp(),
-						securityProperties.getBrowser().getSessionInvalideUrl()+".html",
-						securityProperties.getBrowser().getSessionInvalideUrl()+".json",
-						SecurityContant.DEMO_SIGNOUT
-						).permitAll()
+				
+//				.and()
+//				// 授权
+//				.authorizeRequests().antMatchers(
+//						SecurityContant.AUTHENTICATION_REQUIRE,
+//						SecurityContant.ERROR,
+//						SecurityContant.MYCODE,
+//						SecurityContant.AUTHENTICATION_MOBILE,
+//						SecurityContant.USER_REGIST,
+//						securityProperties.getBrowser().getLoginpage(),
+//						securityProperties.getBrowser().getSignUp(),
+//						securityProperties.getBrowser().getSessionInvalideUrl()+".html",
+//						securityProperties.getBrowser().getSessionInvalideUrl()+".json",
+//						SecurityContant.DEMO_SIGNOUT
+//						).permitAll()
+				//设置授权
+				//.antMatchers("/user/1").hasRole("USER")
 				//.antMatchers(getUrlaArr()).permitAll()
-				.anyRequest().authenticated().and().csrf().disable();
+				//.anyRequest().authenticated()
+				
+				.and().csrf().disable();
+		authorizationProviderManager.config(http.authorizeRequests());
+		
 		//记住我
 		http.rememberMe()
 		.tokenRepository(persistentTokenRepository())

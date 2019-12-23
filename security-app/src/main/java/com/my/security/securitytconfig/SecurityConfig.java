@@ -12,6 +12,7 @@ import org.springframework.social.security.SpringSocialConfigurer;
 
 import com.my.security.authentication.MyAuthenticationFailHandler;
 import com.my.security.authentication.MyAuthenticationSuccessHandler;
+import com.my.security.authrority.AuthorizationProviderManager;
 import com.my.security.properites.SecurityProperties;
 import com.my.security.sms.authentication.SmsAuthenticationConfig;
 import com.my.security.vaidata.code.SecurityContant;
@@ -37,6 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private SmsAndImageValidataFilterConfig smsAndImageValidataFilterConfig;
 	@Autowired
 	private SpringSocialConfigurer springSocialConfigurer;
+	@Autowired
+	private AuthorizationProviderManager authorizationProviderManager;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -60,16 +63,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //				// 登录失败之后的处理
 //				.failureHandler(myAuthenticationFailHandler).and()
 				// 授权
-				.and()
-				.authorizeRequests()
-				.antMatchers(SecurityContant.AUTHENTICATION_REQUIRE, SecurityContant.ERROR, SecurityContant.MYCODE,
-						SecurityContant.AUTHENTICATION_MOBILE, SecurityContant.USER_REGIST,
-						securityProperties.getBrowser().getLoginpage(), securityProperties.getBrowser().getSignUp(),
-						securityProperties.getBrowser().getSessionInvalideUrl() + ".html",
-						securityProperties.getBrowser().getSessionInvalideUrl() + ".json", SecurityContant.DEMO_SIGNOUT)
-				.permitAll()
-				// .antMatchers(getUrlaArr()).permitAll()
-				.anyRequest().authenticated().and().csrf().disable();
+//				.and()
+//				.authorizeRequests()
+//				.antMatchers(SecurityContant.AUTHENTICATION_REQUIRE, SecurityContant.ERROR, SecurityContant.MYCODE,
+//						SecurityContant.AUTHENTICATION_MOBILE, SecurityContant.USER_REGIST,
+//						securityProperties.getBrowser().getLoginpage(), securityProperties.getBrowser().getSignUp(),
+//						securityProperties.getBrowser().getSessionInvalideUrl() + ".html",
+//						securityProperties.getBrowser().getSessionInvalideUrl() + ".json", SecurityContant.DEMO_SIGNOUT)
+//				.permitAll()
+//				// .antMatchers(getUrlaArr()).permitAll()
+//				.anyRequest().authenticated()
+				.and().csrf().disable();
+		
+		authorizationProviderManager.config(http.authorizeRequests());
 	}
 
 	/**
