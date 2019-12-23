@@ -1,5 +1,9 @@
 server:
   port: 7021
+  servlet:
+   session:
+     cookie:
+       name: SSOCLIENT2SESSION  
 #服务的名称
 spring:
   application:

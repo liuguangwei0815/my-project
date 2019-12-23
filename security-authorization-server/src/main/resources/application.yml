@@ -1,5 +1,9 @@
 server:
   port: 7019
+  servlet:
+    session:
+      cookie:
+        name: AUTHORIZATIONSERVERSESSION
 #服务的名称
 spring:
   application:
