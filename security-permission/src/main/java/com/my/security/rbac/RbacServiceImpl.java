@@ -26,7 +26,7 @@ public class RbacServiceImpl implements RbacService {
 		
 		if(principal instanceof UserDetails) {
 			
-			String username = ((UserDetails)authentication).getUsername();
+			String username = ((UserDetails)principal).getUsername();
 			//通过用户名查询url
 			Set<String> url = new HashSet<>();
 			isPermission = url.stream().filter(e->mathcer.match(request.getRequestURI(), e)).findFirst().isPresent();
