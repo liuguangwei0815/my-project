@@ -4,6 +4,7 @@
 package com.my.security.authrority;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import com.my.security.vaidata.code.SecurityContant;
  *
  */
 @Component
+@Order(Integer.MIN_VALUE)
 public class AuthorizationProviderImple implements AuthorizationProvider {
 
 	@Autowired

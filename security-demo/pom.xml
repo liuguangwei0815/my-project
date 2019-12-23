@@ -96,6 +96,11 @@
 			<artifactId>security-browser</artifactId>
 		</dependency> 
 		
+		<dependency>
+			<groupId>com.my.security</groupId>
+			<artifactId>security-permission</artifactId>
+		</dependency> 
+		
 			<!-- 自有项目 -->
 	<!-- 	<dependency>
 			<groupId>com.my.security</groupId>

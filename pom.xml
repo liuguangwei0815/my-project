@@ -58,6 +58,13 @@
 				<artifactId>security-app</artifactId>
 				<version>${my.project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.my.security</groupId>
+				<artifactId>security-permission</artifactId>
+				<version>${my.project.version}</version>
+			</dependency>
+
+
 		</dependencies>
 	</dependencyManagement>
 
@@ -89,5 +96,6 @@
 		<module>security-authorization-server</module>
 		<module>security-sso-client1</module>
 		<module>security-sso-client2</module>
+		<module>security-permission</module>
 	</modules>
 </project>
