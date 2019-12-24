@@ -97,5 +97,6 @@
 		<module>security-sso-client1</module>
 		<module>security-sso-client2</module>
 		<module>security-permission</module>
+		<module>security-api</module>
 	</modules>
 </project>
