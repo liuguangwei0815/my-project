@@ -7,7 +7,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,11 +21,9 @@ import com.my.security.user.dto.UserInfo;
 import com.my.security.user.entity.User;
 import com.my.security.user.service.UserService;
 
-import lombok.extern.slf4j.Slf4j;
-
 @RestController
 @RequestMapping("/user")
-@Slf4j
+//@Slf4j
 public class UserController {
 
 	@Autowired
@@ -72,7 +69,8 @@ public class UserController {
 		SimpleResponse simpleResponse = userService.get(id);
 
 		if (simpleResponse.getData()==null) {
-			return SimpleResponse.fail("查询用户不存在");
+			//return SimpleResponse.fail("查询用户不存在");
+			throw new RuntimeException("查询用户不存在");
 		}
 
 		User dbUser = (User) simpleResponse.getData();
@@ -80,7 +78,8 @@ public class UserController {
 		User user = (User) request.getAttribute("user");
 
 		if (user == null || (user.getId().intValue() != dbUser.getId().intValue())) {
-			return SimpleResponse.fail("查询用户失败，你暂无权限查询");
+			//rreturn SimpleResponse.fail("查询用户失败，你暂无权限查询");
+			throw new RuntimeException("查询用户失败，你暂无权限查询");
 		}
 		return userService.get(id);
 	}
