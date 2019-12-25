@@ -1,5 +1,7 @@
 package com.my.security.suport;
 
+import org.apache.commons.lang.StringUtils;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -30,5 +32,10 @@ public class SimpleResponse {
 	public static SimpleResponse fail() {
 		return new SimpleResponse("0", "操作失败", null);
 	}
+	
+	public boolean isSucc() {
+		return StringUtils.equals(this.getCode(), "1");
+	}
+	
 
 }

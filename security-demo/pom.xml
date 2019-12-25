@@ -81,32 +81,29 @@
 
 
 
-	 <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt 解析 jwt 扩展信息-->
-	<dependency>
-	    <groupId>io.jsonwebtoken</groupId>
-	    <artifactId>jjwt</artifactId>
-	    <version>0.7.0</version>
-	</dependency>
-
+		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt 解析 jwt 扩展信息 -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.7.0</version>
+		</dependency>
 
 
 		<!-- 自有项目 -->
 		<dependency>
 			<groupId>com.my.security</groupId>
 			<artifactId>security-browser</artifactId>
-		</dependency> 
-		
+		</dependency>
+
 		<dependency>
 			<groupId>com.my.security</groupId>
 			<artifactId>security-permission</artifactId>
-		</dependency> 
-		
-			<!-- 自有项目 -->
-	<!-- 	<dependency>
-			<groupId>com.my.security</groupId>
-			<artifactId>security-app</artifactId>
-		</dependency> -->
-		
+		</dependency>
+
+		<!-- 自有项目 -->
+		<!-- <dependency> <groupId>com.my.security</groupId> <artifactId>security-app</artifactId> 
+			</dependency> -->
+
 	</dependencies>
 
 	<build>

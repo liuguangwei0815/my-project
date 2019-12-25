@@ -123,7 +123,12 @@
 			<artifactId>guava</artifactId>
 		</dependency>
 
-
+		<!-- https://mvnrepository.com/artifact/com.lambdaworks/scrypt -->
+		<dependency>
+			<groupId>com.lambdaworks</groupId>
+			<artifactId>scrypt</artifactId>
+			<version>1.4.0</version>
+		</dependency>
 
 
 
