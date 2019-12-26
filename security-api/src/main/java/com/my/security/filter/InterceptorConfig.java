@@ -2,7 +2,6 @@ package com.my.security.filter;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.Aware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,10 +24,13 @@ public class InterceptorConfig extends WebMvcConfigurationSupport {
 
 	@Autowired
 	private AuditLogInterceptor auditLogInterceptor;
+	@Autowired
+	private AclInterceptor aclInterceptor;
 
 	@Override
 	protected void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(auditLogInterceptor);//.addPathPatterns(patterns) 这个可以添加指定链接的 针对某些请求;
+		registry.addInterceptor(aclInterceptor);
 	}
 	
 	/**

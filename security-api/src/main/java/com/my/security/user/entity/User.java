@@ -35,11 +35,22 @@ public class User {
 	private String name;
 
 	private String password;
+	
+	private String permission;//简单的acl 权限
 
 	public UserInfo build() {
 		UserInfo user = new UserInfo();
 		BeanUtils.copyProperties(this, user);
 		return user;
+	}
+
+	public boolean permission(String method) {
+		if(method.equalsIgnoreCase("get")&&this.getPermission().contains("r")) {
+			return true;
+		}else if(this.getPermission().contains("w")) {
+			return true;
+		}
+		return false;
 	}
 
 }
