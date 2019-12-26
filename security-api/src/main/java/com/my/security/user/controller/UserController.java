@@ -49,6 +49,11 @@ public class UserController {
 			return SimpleResponse.fail("创建失败");
 		}
 	}
+	
+	@GetMapping("/login")
+	public SimpleResponse login() {
+		return SimpleResponse.success("登录成功", null);
+	}
 
 	private SimpleResponse BuildErroMsg(ObjectError e) {
 		return SimpleResponse.fail(e.getDefaultMessage());
