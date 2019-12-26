@@ -29,7 +29,7 @@ public class AclInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 		boolean result = Boolean.TRUE;
 
-		Object user = request.getAttribute("user");
+		Object user = request.getSession().getAttribute("user");
 		
 		if(!ArrayUtils.contains(str, request.getRequestURI())) {
 			if (user == null) {

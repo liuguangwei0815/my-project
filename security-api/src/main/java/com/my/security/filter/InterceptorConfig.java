@@ -7,8 +7,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+
+import com.my.security.user.entity.User;
 
 /**
  * 拦截器配置
@@ -42,7 +46,14 @@ public class InterceptorConfig extends WebMvcConfigurationSupport {
 		return new AuditorAware<String>() {
 			@Override
 			public Optional<String> getCurrentAuditor() {
-				return Optional.of("jojo");
+				//通过这个工具类可以获取ession
+				ServletRequestAttributes  rat = (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
+				User user = (User) rat.getRequest().getSession().getAttribute("user");
+				String userName = null;
+				if(user!=null) {
+					userName = user.getUserName();
+				}
+				return Optional.ofNullable(userName);
 			}
 		};
 	}

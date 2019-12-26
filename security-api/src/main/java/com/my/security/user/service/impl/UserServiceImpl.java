@@ -56,5 +56,9 @@ public class UserServiceImpl implements UserService {
 	public SimpleResponse query(String userName) {
 		return SimpleResponse.success(userResposity.findByUserName(userName));
 	}
+	@Override
+	public User login(String userName) {
+		return userResposity.findByUserName(userName);
+	}
 
 }

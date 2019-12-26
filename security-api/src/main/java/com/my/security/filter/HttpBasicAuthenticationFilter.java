@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @Order(2)
 @Slf4j
 public class HttpBasicAuthenticationFilter extends OncePerRequestFilter {
-	
+
 	@Autowired
 	private UserResposity userResposity;
 
@@ -41,16 +41,27 @@ public class HttpBasicAuthenticationFilter extends OncePerRequestFilter {
 		String authorization = request.getHeader("Authorization");
 		if (StringUtils.isNotBlank(authorization)) {
 			String basic = StringUtils.substringAfter(authorization, "Basic ");
-			String[] items = StringUtils.splitByWholeSeparatorPreserveAllTokens(new String(Base64Utils.decodeFromString(basic)), ":");
+			String[] items = StringUtils
+					.splitByWholeSeparatorPreserveAllTokens(new String(Base64Utils.decodeFromString(basic)), ":");
 			String userName = items[0];
 			String passWord = items[1];
 			User user = userResposity.findByUserName(userName);
-			//if(user!=null&&StringUtils.equals(passWord, user.getPassword())) {
-			if(user!=null&&SCryptUtil.check(passWord, user.getPassword())) {
-				request.setAttribute("user", user);
+			// if(user!=null&&StringUtils.equals(passWord, user.getPassword())) {
+			if (user != null && SCryptUtil.check(passWord, user.getPassword())) {
+				request.getSession().setAttribute("user", user);
+				request.getSession().setAttribute("temp", true);
 			}
 		}
-		filterChain.doFilter(request, response);
+		try {
+			filterChain.doFilter(request, response);
+		} finally {
+			//这个类似interceptor 的 afterCompliance 方法 就是返回回去的时候调用的，那么每次basic 都需要通过传输Basic 账号和密码
+			if (request.getSession().getAttribute("temp") != null) {
+				request.getSession().invalidate();
+			}
+
+		}
+
 	}
 
 }

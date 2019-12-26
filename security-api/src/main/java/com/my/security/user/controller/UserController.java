@@ -1,6 +1,7 @@
 package com.my.security.user.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
@@ -32,16 +33,16 @@ public class UserController {
 	/**
 	 * @RequestBody 接受json参数
 	 * @param user
-	 *  @Validated 才能启动model 里的 校验标签
+	 * @Validated 才能启动model 里的 校验标签
 	 * @return
 	 */
 	@PostMapping
-	public SimpleResponse create(@RequestBody @Valid UserInfo user,BindingResult result) {
-		if(result.hasErrors())
-			return  result.getAllErrors().stream().map(e->BuildErroMsg(e)).findFirst().get();
+	public SimpleResponse create(@RequestBody @Valid UserInfo user, BindingResult result) {
+		if (result.hasErrors())
+			return result.getAllErrors().stream().map(e -> BuildErroMsg(e)).findFirst().get();
 		try {
 			return userService.create(user);
-		}catch(ConstraintViolationException e1){
+		} catch (ConstraintViolationException e1) {
 			e1.printStackTrace();
 			return SimpleResponse.fail(e1.getLocalizedMessage());
 		} catch (Exception e) {
@@ -49,9 +50,18 @@ public class UserController {
 			return SimpleResponse.fail("创建失败");
 		}
 	}
-	
+
 	@GetMapping("/login")
-	public SimpleResponse login() {
+	public SimpleResponse login(String userName, HttpServletRequest request) {
+		User user = userService.login(userName);
+		//为flas 就是在检查时候如果sessin 已经存在 就返回session 否则就返回null
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			//给已经存在的给失效
+			session.invalidate();
+		}
+		//设置为true 就是代表如果存在就返回session ，否则会自动创建一个sssion
+		request.getSession(true).setAttribute("user", user);
 		return SimpleResponse.success("登录成功", null);
 	}
 
@@ -73,17 +83,17 @@ public class UserController {
 	public SimpleResponse get(@PathVariable Long id, HttpServletRequest request) {
 		SimpleResponse simpleResponse = userService.get(id);
 
-		if (simpleResponse.getData()==null) {
-			//return SimpleResponse.fail("查询用户不存在");
+		if (simpleResponse.getData() == null) {
+			// return SimpleResponse.fail("查询用户不存在");
 			throw new RuntimeException("查询用户不存在");
 		}
 
 		User dbUser = (User) simpleResponse.getData();
 
-		User user = (User) request.getAttribute("user");
+		User user = (User) request.getSession().getAttribute("user");
 
 		if (user == null || (user.getId().intValue() != dbUser.getId().intValue())) {
-			//rreturn SimpleResponse.fail("查询用户失败，你暂无权限查询");
+			// rreturn SimpleResponse.fail("查询用户失败，你暂无权限查询");
 			throw new RuntimeException("查询用户失败，你暂无权限查询");
 		}
 		return userService.get(id);

@@ -32,7 +32,7 @@ public class AuditLogInterceptor implements HandlerInterceptor {
 			throws Exception {
 
 		log.info("开始方法开始记录审计。。。");
-		Object user = request.getAttribute("user");
+		Object user = request.getSession().getAttribute("user");
 		AuditLog log = new AuditLog();
 		log.setMethod(request.getMethod());
 		log.setPath(request.getRequestURI());
