@@ -54,15 +54,20 @@ public class UserController {
 	@GetMapping("/login")
 	public SimpleResponse login(String userName, HttpServletRequest request) {
 		User user = userService.login(userName);
-		//为flas 就是在检查时候如果sessin 已经存在 就返回session 否则就返回null
+		// 为flas 就是在检查时候如果sessin 已经存在 就返回session 否则就返回null
 		HttpSession session = request.getSession(false);
 		if (session != null) {
-			//给已经存在的给失效
+			// 给已经存在的给失效
 			session.invalidate();
 		}
-		//设置为true 就是代表如果存在就返回session ，否则会自动创建一个sssion
+		// 设置为true 就是代表如果存在就返回session ，否则会自动创建一个sssion
 		request.getSession(true).setAttribute("user", user);
 		return SimpleResponse.success("登录成功", null);
+	}
+
+	@GetMapping("/logout")
+	public void logout(String userName, HttpServletRequest request) {
+		request.getSession().invalidate();
 	}
 
 	private SimpleResponse BuildErroMsg(ObjectError e) {
