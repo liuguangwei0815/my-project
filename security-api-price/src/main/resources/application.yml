@@ -1,13 +1,12 @@
 server:
-  port: 7022
+  port: 7023
   servlet:
    session:
      cookie:
-       name: SSOCLIENT2SESSION  
+       name: SSOCLIENT2SESSIONPRICE  
 #服务的名称
 spring:
   application:
-    name: security-api-user
-
+    name: security-api-price
   
  
