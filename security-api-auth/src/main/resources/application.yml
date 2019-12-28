@@ -1,0 +1,12 @@
+server:
+  port: 7024
+  servlet:
+   session:
+     cookie:
+       name: SSOCLIENT2SESSIONAUTH
+#服务的名称
+spring:
+  application:
+    name: security-api-auth
+  
+ 

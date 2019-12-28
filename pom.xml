@@ -107,5 +107,6 @@
 		<module>security-api-user</module>
 		<module>security-api-order</module>
 		<module>security-api-price</module>
-	</modules>
+		<module>security-api-auth</module>
+</modules>
 </project>
