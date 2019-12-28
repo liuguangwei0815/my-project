@@ -9,7 +9,7 @@
 	</parent>
 	<artifactId>security-browser</artifactId>
 
-	<dependencyManagement>
+<!-- 	<dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
@@ -20,7 +20,7 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
+ -->
 	<dependencies>
 	
        <dependency>

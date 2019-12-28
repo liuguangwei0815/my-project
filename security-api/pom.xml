@@ -9,7 +9,7 @@
 	</parent>
 	<artifactId>security-api-user</artifactId>
 	<description>api 安全</description>
-	<dependencyManagement>
+	<!-- <dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
@@ -19,7 +19,7 @@
 				<scope>import</scope>
 			</dependency>
 		</dependencies>
-	</dependencyManagement>
+	</dependencyManagement> -->
 
 	<dependencies>
 

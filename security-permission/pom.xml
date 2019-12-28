@@ -7,7 +7,7 @@
   </parent>
   <artifactId>security-permission</artifactId>
   
-  <dependencyManagement>
+<!--   <dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
@@ -17,7 +17,7 @@
 				<scope>import</scope>
 			</dependency>
 		</dependencies>
-	</dependencyManagement>
+	</dependencyManagement> -->
 
 
 	<dependencies>
