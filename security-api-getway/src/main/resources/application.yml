@@ -1,12 +1,23 @@
 server:
   port: 7026
-  servlet:
-   session:
-     cookie:
-       name: SSOCLIENT2SESSIONODER 
+  #servlet:
+   #session:
+     #cookie:
+       #name: SSOCLIENT2SESSIONZUUL
 #服务的名称
 spring:
   application:
-    name: security-api-order
+    name: security-api-getway
   
- 
+zuul:
+  routes:
+    #资源服务器
+    order:
+      url: http://localhost:7025
+    #认证服务器
+    token:
+      url: http://localhost:7024
+      ##需要忽略的header 如果为空那么不忽略，都进行转发
+  sensitive-headers:
+
+
