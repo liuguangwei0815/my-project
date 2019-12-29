@@ -1,5 +1,5 @@
 server:
-  port: 7025
+  port: 7026
   servlet:
    session:
      cookie:

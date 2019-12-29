@@ -108,5 +108,6 @@
 		<module>security-api-order</module>
 		<module>security-api-price</module>
 		<module>security-api-auth</module>
-</modules>
+		<module>security-api-getway</module>
+	</modules>
 </project>
