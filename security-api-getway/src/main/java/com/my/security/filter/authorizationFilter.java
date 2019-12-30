@@ -7,6 +7,7 @@ import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -41,6 +42,9 @@ public class authorizationFilter extends ZuulFilter {
 				if (!isHasPermission(token, request)) {
 					handleError(403, requestContext);
 				}
+				
+				//将用户信息放到zuulRequestHeader去
+				requestContext.addZuulRequestHeader("username", token.getUser_name());
 
 			} else {
 				// 如果token 的链接 那么 这个不需要处理
@@ -54,13 +58,24 @@ public class authorizationFilter extends ZuulFilter {
 	}
 
 	private boolean isNeedAuth(HttpServletRequest request) {
+		if(StringUtils.startsWith(request.getRequestURI(), "/haha")) {
+			return false;
+		}
 		// TODO 是否需要认证 通过url 进行判断 结合数据看的是否验证的链接进行判断
 		return true;
 	}
 
 	private boolean isHasPermission(TokenInfo tokenInfo, HttpServletRequest request) {
-		//TODO 这里做权限判断 通过tokenInfo 的信息 比如件简单的acl 权限控制
-		return new Random().nextInt() % 2 == 0;
+		// 读权限
+		if (ArrayUtils.contains(tokenInfo.getScope(), "read")
+				&& StringUtils.equalsIgnoreCase(request.getMethod(), "GET")) {
+			return true;
+		} else if (ArrayUtils.contains(tokenInfo.getScope(), "write")
+				&& StringUtils.equalsIgnoreCase(request.getMethod(), "POST")) {
+			return true;
+		}
+		// TODO 这里做权限判断 通过tokenInfo 的信息 比如件简单的acl 权限控制
+		return false;
 	}
 
 	private void handleError(int status, RequestContext requestContext) {
