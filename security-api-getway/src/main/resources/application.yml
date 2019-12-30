@@ -19,5 +19,33 @@ zuul:
       url: http://localhost:7024
       ##需要忽略的header 如果为空那么不忽略，都进行转发
   sensitive-headers:
+  ratelimit:
+    enabled: true
+    repository: jpa
+    default-policy-list: #默认配置 如果没有具体配置明细
+    - limit: 2 #限制次数
+      quota: 1 #最大时间为1秒
+      refresh-interval: 3 #3秒内
+      # 以上语句的意思： 3秒内只允许通过2次请求 ，2次的请求的时间不能超过1秒 否则限流
+      type:
+      - url
+      - httpmethod
+      #- user # 这个一般不用 需要secrity的支持
+      #- origin #ip 客户端id
+    policy-list: #配置了 就会配置
+       token:
+        - limit: 2 #限制次数
+          quota: 1 #最大时间为1秒
+          refresh-interval: 3 #3秒内
+          # 以上语句的意思： 3秒内只允许通过2次请求 ，2次的请求的时间不能超过1秒 否则限流
+          type:
+          - url
+          - httpmethod
+        
+        
+           
+     
+      
+    
 
 
