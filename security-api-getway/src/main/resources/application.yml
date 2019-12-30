@@ -1,9 +1,9 @@
 server:
   port: 7026
-  #servlet:
-   #session:
-     #cookie:
-       #name: SSOCLIENT2SESSIONZUUL
+  servlet:
+   session:
+     cookie:
+       name: SSOCLIENT2SESSIONZUUL 
 #服务的名称
 spring:
   application:
