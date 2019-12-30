@@ -1,0 +1,12 @@
+server:
+  port: 7027
+  servlet:
+   session:
+     cookie:
+       name: SSOCLIENT2SESSIONAMIDN
+#服务的名称
+spring:
+  application:
+    name: security-api-admin
+  
+ 
