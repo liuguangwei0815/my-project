@@ -24,6 +24,15 @@ export class AppComponent {
     });
   }
 
+   //方法
+  logout() {
+    this.http.post("logout", {}).subscribe(() => {
+      this.authenticated = false;
+    }, () => {
+      alert("login fail");
+    });
+  }
+
   //作为前端服务 将前端请求携带token 访问网关服务器 然后网关然后在转发到资源服务器上
   getOrderInfo() {
     this.http.get("api/order/orders/1").subscribe(data => {
@@ -32,6 +41,6 @@ export class AppComponent {
       alert("get order  fail");
     });
   }
-  
+
 
 }

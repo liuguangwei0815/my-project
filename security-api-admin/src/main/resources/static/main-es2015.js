@@ -32,7 +32,7 @@ webpackEmptyAsyncContext.id = "./$$_lazy_route_resource lazy recursive";
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div style=\"text-align:center\" [hidden]=\"!authenticated\">\r\n\t<h1>welcome to {{title}}</h1>\r\n\t<button (click)=\"getOrderInfo()\" type=\"button\" class=\"btn btn-primary\">get order Info</button>\r\n\t<p>order id：{{ order.id }}</p>\r\n\t<p>订单产品id：{{ order.productId }}</p>\r\n</div>\r\n\r\n<div class=\"row\">\r\n\t<div class=\"col-lg-4\"></div>\r\n\t<div class=\"col-lg-4\">\r\n\t\t<!-- 方括号绑定的是属性，圆括号绑定的是方法， [(ngModel)] 标识双向绑定 会绑定到 credentials.username app.module.ts 是管理所有依赖的-->\r\n\t\t<div [hidden]=\"authenticated\">\r\n\t\t\t<p>plese login </p>\r\n\t\t\t<form role=\"form\" (submit)=\"login()\">\r\n\t\t\t\t<div class=\"form-group\">\r\n\t\t\t\t\t<label for=\"username\">UserName:</label>\r\n\t\t\t\t\t<input type=\"text\" class=\"form-control\" id=\"username\" name=\"username\"\r\n\t\t\t\t\t\t[(ngModel)]=\"credentials.username\" />\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"form-group\">\r\n\t\t\t\t\t<label for=\"username\">Password:</label>\r\n\t\t\t\t\t<input type=\"password\" class=\"form-control\" id=\"password\" name=\"password\"\r\n\t\t\t\t\t\t[(ngModel)]=\"credentials.password\" />\r\n\t\t\t\t</div>\r\n\t\t\t\t<button type=\"submit\" class=\"btn btn-primary\">Login</button>\r\n\t\t\t</form>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"col-lg-4\"></div>\r\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<div style=\"text-align:center\" [hidden]=\"!authenticated\">\r\n\t<h1>welcome to {{title}}</h1>\r\n\t<button (click)=\"getOrderInfo()\" type=\"button\" class=\"btn btn-primary\">get order Info</button>\r\n\t<p>order id：{{ order.id }}</p>\r\n\t<p>订单产品id：{{ order.productId }}</p>\r\n\t<button (click)=\"logout()\" type=\"button\" class=\"btn btn-primary\">LogOut</button>\r\n</div>\r\n\r\n<div class=\"row\">\r\n\t<div class=\"col-lg-4\"></div>\r\n\t<div class=\"col-lg-4\">\r\n\t\t<!-- 方括号绑定的是属性，圆括号绑定的是方法， [(ngModel)] 标识双向绑定 会绑定到 credentials.username app.module.ts 是管理所有依赖的-->\r\n\t\t<div [hidden]=\"authenticated\">\r\n\t\t\t<p>plese login </p>\r\n\t\t\t<form role=\"form\" (submit)=\"login()\">\r\n\t\t\t\t<div class=\"form-group\">\r\n\t\t\t\t\t<label for=\"username\">UserName:</label>\r\n\t\t\t\t\t<input type=\"text\" class=\"form-control\" id=\"username\" name=\"username\"\r\n\t\t\t\t\t\t[(ngModel)]=\"credentials.username\" />\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"form-group\">\r\n\t\t\t\t\t<label for=\"username\">Password:</label>\r\n\t\t\t\t\t<input type=\"password\" class=\"form-control\" id=\"password\" name=\"password\"\r\n\t\t\t\t\t\t[(ngModel)]=\"credentials.password\" />\r\n\t\t\t\t</div>\r\n\t\t\t\t<button type=\"submit\" class=\"btn btn-primary\">Login</button>\r\n\t\t\t</form>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"col-lg-4\"></div>\r\n</div>");
 
 /***/ }),
 
@@ -308,6 +308,14 @@ let AppComponent = class AppComponent {
     login() {
         this.http.post("login", this.credentials).subscribe(() => {
             this.authenticated = true;
+        }, () => {
+            alert("login fail");
+        });
+    }
+    //方法
+    logout() {
+        this.http.post("logout", {}).subscribe(() => {
+            this.authenticated = false;
         }, () => {
             alert("login fail");
         });

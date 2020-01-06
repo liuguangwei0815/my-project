@@ -49,6 +49,11 @@ public class SecurityApiAdminApplication {
 		//将token放到session中弄去
 		request.getSession().setAttribute("tokenInfo", response.getBody());
 	}
+	@PostMapping("/logout")
+	public void logout(HttpServletRequest request) {
+		request.getSession().invalidate();
+	}
+	
 	
 	public static void main(String[] args) {
 		SpringApplication.run(SecurityApiAdminApplication.class);
