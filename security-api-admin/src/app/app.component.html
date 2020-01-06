@@ -1,3 +1,27 @@
-<div style="text-align:center">
-<h1>welcome to {{title}}</h1>
+<div style="text-align:center" [hidden]="!authenticated">
+	<h1>welcome to {{title}}</h1>
+</div>
+
+<div class="row">
+	<div class="col-lg-4"></div>
+	<div class="col-lg-4">
+		<!-- 方括号绑定的是属性，圆括号绑定的是方法， [(ngModel)] 标识双向绑定 会绑定到 credentials.username app.module.ts 是管理所有依赖的-->
+		<div [hidden]="authenticated">
+			<p>plese login </p>
+			<form role="form" (submit)="login()">
+				<div class="form-group">
+					<label for="username">UserName:</label>
+					<input type="text" class="form-control" id="username" name="username"
+						[(ngModel)]="credentials.username" />
+				</div>
+				<div class="form-group">
+					<label for="username">Password:</label>
+					<input type="password" class="form-control" id="password" name="password"
+						[(ngModel)]="credentials.password" />
+				</div>
+				<button type="submit" class="btn btn-primary">Login</button>
+			</form>
+		</div>
+	</div>
+	<div class="col-lg-4"></div>
 </div>

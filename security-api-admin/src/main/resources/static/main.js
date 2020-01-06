@@ -32,7 +32,7 @@ webpackEmptyAsyncContext.id = "./$$_lazy_route_resource lazy recursive";
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div style=\"text-align:center\">\r\n<h1>welcome to {{title}}</h1>\r\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<div style=\"text-align:center\" [hidden]=\"!authenticated\">\r\n\t<h1>welcome to {{title}}</h1>\r\n</div>\r\n\r\n<div class=\"row\">\r\n\t<div class=\"col-lg-4\"></div>\r\n\t<div class=\"col-lg-4\">\r\n\t\t<!-- 方括号绑定的是属性，圆括号绑定的是方法， [(ngModel)] 标识双向绑定 会绑定到 credentials.username app.module.ts 是管理所有依赖的-->\r\n\t\t<div [hidden]=\"authenticated\">\r\n\t\t\t<p>plese login </p>\r\n\t\t\t<form role=\"form\" (submit)=\"login()\">\r\n\t\t\t\t<div class=\"form-group\">\r\n\t\t\t\t\t<label for=\"username\">UserName:</label>\r\n\t\t\t\t\t<input type=\"text\" class=\"form-control\" id=\"username\" name=\"username\"\r\n\t\t\t\t\t\t[(ngModel)]=\"credentials.username\" />\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"form-group\">\r\n\t\t\t\t\t<label for=\"username\">Password:</label>\r\n\t\t\t\t\t<input type=\"password\" class=\"form-control\" id=\"password\" name=\"password\"\r\n\t\t\t\t\t\t[(ngModel)]=\"credentials.password\" />\r\n\t\t\t\t</div>\r\n\t\t\t\t<button type=\"submit\" class=\"btn btn-primary\">Login</button>\r\n\t\t\t</form>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"col-lg-4\"></div>\r\n</div>");
 
 /***/ }),
 
@@ -290,13 +290,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppComponent", function() { return AppComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+
 
 
 let AppComponent = class AppComponent {
-    constructor() {
+    //注入http
+    constructor(http) {
+        this.http = http;
         this.title = '我的而第一个angular2';
+        //声明变量控制页面显示
+        this.authenticated = false;
+        this.credentials = { username: "xixi", password: "123456" };
+    }
+    //方法
+    login() {
+        this.http.post("login", this.credentials).subscribe(() => {
+            this.authenticated = true;
+        }, () => {
+            alert("login fail");
+        });
     }
 };
+AppComponent.ctorParameters = () => [
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] }
+];
 AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-root',
@@ -323,9 +341,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
 
 
 
+
+//使双向绑定生效
+
+//发送http请求
 
 let AppModule = class AppModule {
 };
@@ -335,7 +359,9 @@ AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
             _app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]
         ],
         imports: [
-            _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"]
+            _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
+            _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormsModule"],
+            _angular_common_http__WEBPACK_IMPORTED_MODULE_5__["HttpClientModule"] //引进
         ],
         providers: [],
         bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]]
