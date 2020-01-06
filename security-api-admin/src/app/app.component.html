@@ -5,11 +5,11 @@
 	<p>订单产品id：{{ order.productId }}</p>
 	<button (click)="logout()" type="button" class="btn btn-primary">LogOut</button>
 </div>
-
+<!--  现在改造，改为直接跳转到授权服务进行授权 这里直接注释掉
 <div class="row">
 	<div class="col-lg-4"></div>
 	<div class="col-lg-4">
-		<!-- 方括号绑定的是属性，圆括号绑定的是方法， [(ngModel)] 标识双向绑定 会绑定到 credentials.username app.module.ts 是管理所有依赖的-->
+		 方括号绑定的是属性，圆括号绑定的是方法， [(ngModel)] 标识双向绑定 会绑定到 credentials.username app.module.ts 是管理所有依赖的
 		<div [hidden]="authenticated">
 			<p>plese login </p>
 			<form role="form" (submit)="login()">
@@ -29,3 +29,4 @@
 	</div>
 	<div class="col-lg-4"></div>
 </div>
+ -->
