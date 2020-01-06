@@ -84,7 +84,7 @@ public class Oauth2Filter extends ZuulFilter {
 		String token = StringUtils.substringAfter(authorization, "bearer ");
 
 		// 类似资源服务需要发送http请求去获取相关token的信息 然后通过返回值返回到我们的实体类中
-		String checkTokenEndpointUrl = "http://localhost:7024/oauth/check_token";
+		String checkTokenEndpointUrl = "http://security.auth.com:7024/oauth/check_token";
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);

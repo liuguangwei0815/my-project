@@ -8,6 +8,7 @@ import lombok.Data;
 public class Order {
 	
 	@NotBlank(message = "productId 不能为空")
-	private String productId;
+	private Long productId;
+	private Long id;
 
 }

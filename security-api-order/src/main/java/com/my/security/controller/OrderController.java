@@ -18,13 +18,14 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/orders")
 @Slf4j
 public class OrderController {
-	
-	//private RestTemplate restTemplate = new RestTemplate();
-	
+
+	// private RestTemplate restTemplate = new RestTemplate();
+
 	private static final String RPURL = "http://localhost:7023/";
-	
+
 	/**
 	 * 如果不做转换用户信息处理 那么只能获取 username ，如果做了转换 那么这个就不能这么获取了
+	 * 
 	 * @param order
 	 * @param error
 	 * @param username
@@ -44,23 +45,24 @@ public class OrderController {
 //	
 	/**
 	 * 因为启动了网关模式 所以这里通过@RequestHeader 获取，这是个我们在授权filter通过赋值的
+	 * 
 	 * @param order
 	 * @param error
 	 * @param username
 	 * @return
 	 */
 	@PostMapping
-	public Order getOrder(@Valid @RequestBody Order order,BindingResult error,@RequestHeader String username) {
-		if(error.hasErrors()) {
-			error.getAllErrors().stream().map(e->buildError(e)).findFirst();
+	public Order getOrder(@Valid @RequestBody Order order, BindingResult error, @RequestHeader String username) {
+		if (error.hasErrors()) {
+			error.getAllErrors().stream().map(e -> buildError(e)).findFirst();
 		}
-		log.info("oauth2 获取用户信息:{}",username);
-		
-		//PriceInfo pi = restTemplate.getForObject(RPURL+"price/"+order.getProductId(), PriceInfo.class);
-		//log.info("获取产品id：{},价格：{}",order.getProductId(),pi.getPrice());
-		return  order;
+		log.info("oauth2 获取用户信息:{}", username);
+
+		// PriceInfo pi = restTemplate.getForObject(RPURL+"price/"+order.getProductId(),
+		// PriceInfo.class);
+		// log.info("获取产品id：{},价格：{}",order.getProductId(),pi.getPrice());
+		return order;
 	}
-	
 
 //	@GetMapping("/getUserInfo1/{productId}")
 //	public Order getUser1(@PathVariable String productId,@AuthenticationPrincipal MyUser user) {
@@ -73,13 +75,17 @@ public class OrderController {
 //		log.info("spring 表单时只获取其中一个属性：{}",userId);
 //		return  new Order();
 //	}
-	
+
 	@GetMapping("/{productId}")
-	public Order getUser(@PathVariable String productId) {
-		log.info("productId：{}",productId);
-		return  new Order();
+	public Order getUser(@PathVariable Long productId, @RequestHeader String username) {
+		log.info("productId：{}", productId);
+		log.info("username：{}", username);
+		Order order = new Order();
+		order.setId(productId);
+		order.setProductId((Long)(productId * 5));
+		return order;
 	}
-	
+
 	private Object buildError(ObjectError e) {
 		throw new RuntimeException(e.getDefaultMessage());
 	}

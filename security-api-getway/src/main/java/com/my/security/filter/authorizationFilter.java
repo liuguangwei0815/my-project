@@ -43,7 +43,7 @@ public class authorizationFilter extends ZuulFilter {
 					handleError(403, requestContext);
 				}
 				
-				//将用户信息放到zuulRequestHeader去
+				//将用户信息放到zuulRequestHeader去 mvc 就可以通过header 注解获取
 				requestContext.addZuulRequestHeader("username", token.getUser_name());
 
 			} else {

@@ -1,5 +1,8 @@
 <div style="text-align:center" [hidden]="!authenticated">
 	<h1>welcome to {{title}}</h1>
+	<button (click)="getOrderInfo()" type="button" class="btn btn-primary">get order Info</button>
+	<p>order id：{{ order.id }}</p>
+	<p>订单产品id：{{ order.productId }}</p>
 </div>
 
 <div class="row">
