@@ -33,15 +33,14 @@ public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
 	private AuthenticationManager authenticationManager;
 	@Autowired
 	private UserDetailsService userDetailsService;
-	//注入数据源
+	// 注入数据源
 	@Autowired
 	private DataSource dataSource;
-	
+
 	@Bean
 	public TokenStore tokenStore() {
 		return new JdbcTokenStore(dataSource);
 	}
-	
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -66,18 +65,16 @@ public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		endpoints.authenticationManager(authenticationManager).userDetailsService(userDetailsService);
+		endpoints.authenticationManager(authenticationManager)
+		// 如果开启了refresh_token 是没有用户名和密码的，所有要指定这个userDetailsServer
+		.userDetailsService(userDetailsService);
 		endpoints.tokenStore(tokenStore());
 	}
 
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-		//访问token 需要验证
+		// 访问token 需要验证
 		security.checkTokenAccess("isAuthenticated()");
 	}
-	
-	
-	
-	
 
 }

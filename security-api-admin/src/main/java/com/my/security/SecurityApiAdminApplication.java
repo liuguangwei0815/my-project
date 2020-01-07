@@ -89,9 +89,10 @@ public class SecurityApiAdminApplication {
 		ResponseEntity<TokenInfo>
 		responseEnity = restTemplate.exchange(checkTokenEndpointUrl, HttpMethod.POST, entity,
 				TokenInfo.class);
-		log.info("tokenInfo:{}",responseEnity.getBody());
+		TokenInfo newToken = responseEnity.getBody();
+		log.info("tokenInfo:{}",newToken);
 		//将token放到session中弄去
-		request.getSession().setAttribute("tokenInfo", responseEnity.getBody());
+		request.getSession().setAttribute("tokenInfo", newToken.init());
 		//数据库或者属性autoApprove  可以设置为true 那么默认全部授权通过 不需要用户自定义去点击按钮，或者输入read 或write 那么这个会默认授权
 		
 		//这里完全可以通过state 这个表示进行跳转页面的指定
