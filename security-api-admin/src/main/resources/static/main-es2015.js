@@ -329,7 +329,8 @@ let AppComponent = class AppComponent {
     //方法
     logout() {
         this.http.post("logout", {}).subscribe(() => {
-            this.authenticated = false;
+            //thwindowis.authenticated = false;
+            window.location.href = "http://security.auth.com:7024/logout?redirect_uri=http://security.admin.com:7027";
         }, () => {
             alert("login fail");
         });
