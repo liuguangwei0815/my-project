@@ -15,17 +15,19 @@ export class AppComponent {
   //注入http
   constructor(private http: HttpClient) {
 
-    this.http.get("me").subscribe(data=>{
+    // this.http.get("me").subscribe(data=>{ 现在改成cookie获取 那么这个方法不能使用了，我们直接请求到网关服务器进行认证
+    this.http.get("api/user/me").subscribe(data=>{//api会直接跳转到到路由去
       if(data){
         this.authenticated = true;
       }
+      alert("data:"+data)
        //如果未认证直接跳转到认证服务器进行认证 
       // /oauth/authorize?response_type=code&client_id=orderApp&redirect_uri=http://example.com
       if(!this.authenticated){
-        window.location.href="http://security.auth.com:7024/oauth/authorize"
+        window.location.href="http://auth.security.com:7024/oauth/authorize"
         +"?response_type=code"
         +"&client_id=adminServer";
-        +"&redirect_uri=http://security.admin.com:7027/oauth/callback"
+        +"&redirect_uri=http://admin.security.com:7027/oauth/callback"
         +"&state=ABC"; //这个是盐 标识一个状态，比如在某一步跳转到了登录认证，回来的时候会原样回来，那么 就可以通过这个字符串 恢复之前跳转的页面
       }
     });
@@ -43,7 +45,7 @@ export class AppComponent {
   logout() {
     this.http.post("logout", {}).subscribe(() => {
       //thwindowis.authenticated = false;
-      window.location.href="http://security.auth.com:7024/logout?redirect_uri=http://security.admin.com:7027"
+      window.location.href="http://auth.security.com:7024/logout?redirect_uri=http://admin.security.com:7027"
       
     }, () => {
       alert("login fail");

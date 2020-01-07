@@ -11,6 +11,9 @@ spring:
   
 zuul:
   routes:
+  #只做返回前端请求用户信息 url 这个地址随便写 主要是为了拦截 /user/me 这个请求
+    user:
+      url: http://localhost:7025
     #资源服务器
     order:
       url: http://localhost:7025

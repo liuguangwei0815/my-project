@@ -13,6 +13,6 @@ zuul:
   routes:
     #做处理，然后建立一个filter 就可以拦截这个请求
     api:
-      url: http://security.geteway.com:7026
+      url: http://geteway.security.com:7026
   sensitive-headers:
  

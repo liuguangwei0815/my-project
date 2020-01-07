@@ -2,6 +2,7 @@ package com.my.security;
 
 import java.io.IOException;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -74,7 +75,7 @@ public class SecurityApiAdminApplication {
 	public void callback(@RequestParam String code,String state,HttpServletRequest request,HttpServletResponse response) throws IOException {
 		
 		// 类似资源服务需要发送http请求去获取相关token的信息 然后通过返回值返回到我们的实体类中(网关获取)
-		String checkTokenEndpointUrl = "http://security.geteway.com:7026/token/oauth/token";
+		String checkTokenEndpointUrl = "http://geteway.security.com:7026/token/oauth/token";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 		headers.setBasicAuth("adminServer", "123456");
@@ -82,7 +83,7 @@ public class SecurityApiAdminApplication {
 		MultiValueMap<String, String> param = new LinkedMultiValueMap<String, String>();
 		param.add("grant_type", "authorization_code");
 		param.add("code", code);
-		param.add("redirect_uri","http://security.admin.com:7027/oauth/callback");
+		param.add("redirect_uri","http://admin.security.com:7027/oauth/callback");
 		param.add("client_id","adminServer");
 		//param.add("scope", "read write");
 		HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(param, headers);
@@ -91,8 +92,22 @@ public class SecurityApiAdminApplication {
 				TokenInfo.class);
 		TokenInfo newToken = responseEnity.getBody();
 		log.info("tokenInfo:{}",newToken);
-		//将token放到session中弄去
-		request.getSession().setAttribute("tokenInfo", newToken.init());
+		//第一种 session 存储 将token放到session中弄去
+		//request.getSession().setAttribute("tokenInfo", newToken.init());
+		//第二种 将token放到cookie 进行
+		Cookie cookie = new Cookie("access_token", newToken.getAccess_token());
+		cookie.setDomain("security.com");//设置了一级域名，那么他旗下的二级或者其他都生效，就是以security.com 的域名都会设置这个cookie
+		cookie.setMaxAge(Integer.parseInt(newToken.getExpires_in()));
+		cookie.setPath("/");//设置在根目录
+		response.addCookie(cookie);
+		
+		Cookie cookieReflash = new Cookie("refresh_token", newToken.getRefresh_token());
+		cookieReflash.setDomain("security.com");//设置了一级域名，那么他旗下的二级或者其他都生效，就是以security.com 的域名都会设置这个cookie
+		cookieReflash.setMaxAge(2592000);
+		cookieReflash.setPath("/");//设置在根目录
+		response.addCookie(cookieReflash);
+		//=====================end=====================
+		
 		//数据库或者属性autoApprove  可以设置为true 那么默认全部授权通过 不需要用户自定义去点击按钮，或者输入read 或write 那么这个会默认授权
 		
 		//这里完全可以通过state 这个表示进行跳转页面的指定

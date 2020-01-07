@@ -303,17 +303,19 @@ let AppComponent = class AppComponent {
         this.authenticated = false;
         this.credentials = { username: "xixi", password: "123456" };
         this.order = {};
-        this.http.get("me").subscribe(data => {
+        // this.http.get("me").subscribe(data=>{ 现在改成cookie获取 那么这个方法不能使用了，我们直接请求到网关服务器进行认证
+        this.http.get("api/user/me").subscribe(data => {
             if (data) {
                 this.authenticated = true;
             }
+            alert(this.authenticated);
             //如果未认证直接跳转到认证服务器进行认证 
             // /oauth/authorize?response_type=code&client_id=orderApp&redirect_uri=http://example.com
             if (!this.authenticated) {
-                window.location.href = "http://security.auth.com:7024/oauth/authorize"
+                window.location.href = "http://auth.security.com:7024/oauth/authorize"
                     + "?response_type=code"
                     + "&client_id=adminServer";
-                +"&redirect_uri=http://security.admin.com:7027/oauth/callback"
+                +"&redirect_uri=http://admin.security.com:7027/oauth/callback"
                     + "&state=ABC"; //这个是盐 标识一个状态，比如在某一步跳转到了登录认证，回来的时候会原样回来，那么 就可以通过这个字符串 恢复之前跳转的页面
             }
         });
@@ -330,7 +332,7 @@ let AppComponent = class AppComponent {
     logout() {
         this.http.post("logout", {}).subscribe(() => {
             //thwindowis.authenticated = false;
-            window.location.href = "http://security.auth.com:7024/logout?redirect_uri=http://security.admin.com:7027";
+            window.location.href = "http://auth.security.com:7024/logout?redirect_uri=http://admin.security.com:7027";
         }, () => {
             alert("login fail");
         });
@@ -359,6 +361,54 @@ AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 /***/ }),
 
+/***/ "./src/app/app.interceptor.ts":
+/*!************************************!*\
+  !*** ./src/app/app.interceptor.ts ***!
+  \************************************/
+/*! exports provided: RefreshInterceptor */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RefreshInterceptor", function() { return RefreshInterceptor; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+
+
+
+
+/** Pass untouched request through to the next request handler. */
+let RefreshInterceptor = class RefreshInterceptor {
+    constructor(http) {
+        this.http = http;
+    }
+    intercept(req, next) {
+        return next.handle(req).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["tap"])(() => { }, error => {
+            console.log(error);
+            if (error.status === 500 && error.error.message === 'refresh fail') {
+                // this.logout();
+                window.location.href = "http://auth.security.com:7024/oauth/authorize"
+                    + "?response_type=code"
+                    + "&client_id=adminServer";
+                +"&redirect_uri=http://admin.security.com:7027/oauth/callback"
+                    + "&state=ABC"; //这个是盐 标识一个状态，比如在某一步跳转到了登录认证，回来的时候会原样回来，那么 就可以通过这个字符串 恢复之前跳转的页面
+            }
+        }));
+    }
+};
+RefreshInterceptor.ctorParameters = () => [
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"] }
+];
+RefreshInterceptor = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])()
+], RefreshInterceptor);
+
+
+
+/***/ }),
+
 /***/ "./src/app/app.module.ts":
 /*!*******************************!*\
   !*** ./src/app/app.module.ts ***!
@@ -372,31 +422,35 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
+/* harmony import */ var _app_interceptor__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./app.interceptor */ "./src/app/app.interceptor.ts");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
 
+
+
+//发送http请求
 
 
 
 //使双向绑定生效
-
-//发送http请求
 
 let AppModule = class AppModule {
 };
 AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
         declarations: [
-            _app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]
+            _app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]
         ],
         imports: [
             _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
-            _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormsModule"],
-            _angular_common_http__WEBPACK_IMPORTED_MODULE_5__["HttpClientModule"] //引进
+            _angular_forms__WEBPACK_IMPORTED_MODULE_6__["FormsModule"],
+            _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClientModule"] //引进
         ],
-        providers: [],
-        bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]]
+        providers: [
+            { provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HTTP_INTERCEPTORS"], useClass: _app_interceptor__WEBPACK_IMPORTED_MODULE_5__["RefreshInterceptor"], multi: true },
+        ],
+        bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]]
     })
 ], AppModule);
 
