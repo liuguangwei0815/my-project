@@ -8,7 +8,8 @@ import { RefreshInterceptor } from './app.interceptor';
 
 //使双向绑定生效
 import { FormsModule } from '@angular/forms';
-
+// angurla 操作cookie 需要这个插件
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { FormsModule } from '@angular/forms';
     HttpClientModule//引进
   ],
   providers: [
+    CookieService,
     { provide: HTTP_INTERCEPTORS, useClass: RefreshInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]

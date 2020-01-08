@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-root',
@@ -13,14 +14,13 @@ export class AppComponent {
   credentials = { username: "xixi", password: "123456" };
   order = {};
   //注入http
-  constructor(private http: HttpClient) {
+   constructor(private http: HttpClient, private cookieService: CookieService) {
 
     // this.http.get("me").subscribe(data=>{ 现在改成cookie获取 那么这个方法不能使用了，我们直接请求到网关服务器进行认证
     this.http.get("api/user/me").subscribe(data=>{//api会直接跳转到到路由去
       if(data){
         this.authenticated = true;
       }
-      alert("data:"+data)
        //如果未认证直接跳转到认证服务器进行认证 
       // /oauth/authorize?response_type=code&client_id=orderApp&redirect_uri=http://example.com
       if(!this.authenticated){
@@ -43,6 +43,8 @@ export class AppComponent {
 
    //方法
   logout() {
+    this.cookieService.delete('refresh_token', '/', 'security.com');
+    this.cookieService.delete('access_token', '/', 'security.com');
     this.http.post("logout", {}).subscribe(() => {
       //thwindowis.authenticated = false;
       window.location.href="http://auth.security.com:7024/logout?redirect_uri=http://admin.security.com:7027"

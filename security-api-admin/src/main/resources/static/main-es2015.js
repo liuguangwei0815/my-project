@@ -291,13 +291,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+/* harmony import */ var ngx_cookie_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ngx-cookie-service */ "./node_modules/ngx-cookie-service/ngx-cookie-service.js");
+
 
 
 
 let AppComponent = class AppComponent {
     //注入http
-    constructor(http) {
+    constructor(http, cookieService) {
         this.http = http;
+        this.cookieService = cookieService;
         this.title = '我的而第一个angular2';
         //声明变量控制页面显示
         this.authenticated = false;
@@ -308,7 +311,6 @@ let AppComponent = class AppComponent {
             if (data) {
                 this.authenticated = true;
             }
-            alert(this.authenticated);
             //如果未认证直接跳转到认证服务器进行认证 
             // /oauth/authorize?response_type=code&client_id=orderApp&redirect_uri=http://example.com
             if (!this.authenticated) {
@@ -330,6 +332,8 @@ let AppComponent = class AppComponent {
     }
     //方法
     logout() {
+        this.cookieService.delete('refresh_token', '/', 'security.com');
+        this.cookieService.delete('access_token', '/', 'security.com');
         this.http.post("logout", {}).subscribe(() => {
             //thwindowis.authenticated = false;
             window.location.href = "http://auth.security.com:7024/logout?redirect_uri=http://admin.security.com:7027";
@@ -347,7 +351,8 @@ let AppComponent = class AppComponent {
     }
 };
 AppComponent.ctorParameters = () => [
-    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] }
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
+    { type: ngx_cookie_service__WEBPACK_IMPORTED_MODULE_3__["CookieService"] }
 ];
 AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -426,6 +431,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
 /* harmony import */ var _app_interceptor__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./app.interceptor */ "./src/app/app.interceptor.ts");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
+/* harmony import */ var ngx_cookie_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ngx-cookie-service */ "./node_modules/ngx-cookie-service/ngx-cookie-service.js");
 
 
 
@@ -434,6 +440,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 //使双向绑定生效
+
+// angurla 操作cookie 需要这个插件
 
 let AppModule = class AppModule {
 };
@@ -448,6 +456,7 @@ AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
             _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClientModule"] //引进
         ],
         providers: [
+            ngx_cookie_service__WEBPACK_IMPORTED_MODULE_7__["CookieService"],
             { provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HTTP_INTERCEPTORS"], useClass: _app_interceptor__WEBPACK_IMPORTED_MODULE_5__["RefreshInterceptor"], multi: true },
         ],
         bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]]

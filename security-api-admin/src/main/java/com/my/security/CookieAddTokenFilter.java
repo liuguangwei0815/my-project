@@ -119,8 +119,13 @@ public class CookieAddTokenFilter extends ZuulFilter {
 		RequestContext requestContext = RequestContext.getCurrentContext();
 		HttpServletRequest request = requestContext.getRequest();
 		Cookie[] cs = request.getCookies();
-		Optional<Cookie> oc = Arrays.stream(cs).filter(e -> StringUtils.equals(e.getName(), ckey)).findFirst();
-		return oc.isPresent() ? oc.get().getValue() : null;
+		//Optional<Cookie> oc = Arrays.stream(cs).filter(e -> StringUtils.equals(e.getName(), ckey)).findFirst();
+		for (Cookie cookie : cs) {
+			if(StringUtils.equals(cookie.getName(),ckey)) {
+				return cookie.getValue();
+			}
+		}
+		return null;
 	}
 
 	@Override

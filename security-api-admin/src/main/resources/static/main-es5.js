@@ -670,17 +670,24 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
     /*! @angular/common/http */
     "./node_modules/@angular/common/fesm2015/http.js");
+    /* harmony import */
+
+
+    var ngx_cookie_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+    /*! ngx-cookie-service */
+    "./node_modules/ngx-cookie-service/ngx-cookie-service.js");
 
     var AppComponent =
     /*#__PURE__*/
     function () {
       //注入http
-      function AppComponent(http) {
+      function AppComponent(http, cookieService) {
         var _this = this;
 
         _classCallCheck(this, AppComponent);
 
         this.http = http;
+        this.cookieService = cookieService;
         this.title = '我的而第一个angular2'; //声明变量控制页面显示
 
         this.authenticated = false;
@@ -693,10 +700,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         this.http.get("api/user/me").subscribe(function (data) {
           if (data) {
             _this.authenticated = true;
-          }
-
-          alert(_this.authenticated); //如果未认证直接跳转到认证服务器进行认证 
+          } //如果未认证直接跳转到认证服务器进行认证 
           // /oauth/authorize?response_type=code&client_id=orderApp&redirect_uri=http://example.com
+
 
           if (!_this.authenticated) {
             window.location.href = "http://auth.security.com:7024/oauth/authorize" + "?response_type=code" + "&client_id=adminServer";
@@ -721,6 +727,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "logout",
         value: function logout() {
+          this.cookieService.delete('refresh_token', '/', 'security.com');
+          this.cookieService.delete('access_token', '/', 'security.com');
           this.http.post("logout", {}).subscribe(function () {
             //thwindowis.authenticated = false;
             window.location.href = "http://auth.security.com:7024/logout?redirect_uri=http://admin.security.com:7027";
@@ -748,6 +756,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     AppComponent.ctorParameters = function () {
       return [{
         type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]
+      }, {
+        type: ngx_cookie_service__WEBPACK_IMPORTED_MODULE_3__["CookieService"]
       }];
     };
 
@@ -906,8 +916,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
     var _angular_forms__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
     /*! @angular/forms */
-    "./node_modules/@angular/forms/fesm2015/forms.js"); //发送http请求
+    "./node_modules/@angular/forms/fesm2015/forms.js");
+    /* harmony import */
+
+
+    var ngx_cookie_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(
+    /*! ngx-cookie-service */
+    "./node_modules/ngx-cookie-service/ngx-cookie-service.js"); //发送http请求
     //使双向绑定生效
+    // angurla 操作cookie 需要这个插件
 
 
     var AppModule = function AppModule() {
@@ -918,7 +935,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       declarations: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]],
       imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_6__["FormsModule"], _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClientModule"] //引进
       ],
-      providers: [{
+      providers: [ngx_cookie_service__WEBPACK_IMPORTED_MODULE_7__["CookieService"], {
         provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HTTP_INTERCEPTORS"],
         useClass: _app_interceptor__WEBPACK_IMPORTED_MODULE_5__["RefreshInterceptor"],
         multi: true
