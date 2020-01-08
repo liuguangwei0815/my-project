@@ -5,6 +5,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +17,9 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
 
 /**
@@ -39,7 +43,16 @@ public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
 
 	@Bean
 	public TokenStore tokenStore() {
-		return new JdbcTokenStore(dataSource);
+		//return new JdbcTokenStore(dataSource);
+		return new JwtTokenStore(jwtTokenEnhancer());
+	}
+	@Bean
+	public JwtAccessTokenConverter jwtTokenEnhancer() {
+		JwtAccessTokenConverter conver = new JwtAccessTokenConverter();
+		//conver.setSigningKey("123456");
+		KeyStoreKeyFactory factory = new KeyStoreKeyFactory(new ClassPathResource("jojo.key"), "123456".toCharArray());
+		conver.setKeyPair(factory.getKeyPair("lgw"));//非对称算法
+		return conver;
 	}
 
 	@Override
@@ -68,6 +81,7 @@ public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
 		endpoints.authenticationManager(authenticationManager)
 		// 如果开启了refresh_token 是没有用户名和密码的，所有要指定这个userDetailsServer
 		.userDetailsService(userDetailsService);
+		endpoints.tokenEnhancer(jwtTokenEnhancer());
 		endpoints.tokenStore(tokenStore());
 	}
 
@@ -75,6 +89,7 @@ public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
 		// 访问token 需要验证
 		security.checkTokenAccess("isAuthenticated()");
+		security.tokenKeyAccess("isAuthenticated()");//访问jwt 签名需要身份验证
 	}
 
 }

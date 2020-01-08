@@ -2,6 +2,11 @@ package com.my.security.controller;
 
 import javax.validation.Valid;
 
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +25,11 @@ import lombok.extern.slf4j.Slf4j;
 public class OrderController {
 
 	// private RestTemplate restTemplate = new RestTemplate();
+	
+	@Autowired
+	private OAuth2RestTemplate oAuth2RestTemplate;
 
-	private static final String RPURL = "http://localhost:7023/";
+	private static final String RPURL = "http://localhost:7028/";
 
 	/**
 	 * 如果不做转换用户信息处理 那么只能获取 username ，如果做了转换 那么这个就不能这么获取了
@@ -76,13 +84,29 @@ public class OrderController {
 //		return  new Order();
 //	}
 
+//	@GetMapping("/{productId}")
+//	public Order getUser(@PathVariable Long productId, @RequestHeader String username) {
+//		log.info("productId：{}", productId);
+//		log.info("username：{}", username);
+//		Order order = new Order();
+//		order.setId(productId);
+//		order.setProductId((Long)(productId * 5));
+//		return order;
+//	}
+	
+	
 	@GetMapping("/{productId}")
-	public Order getUser(@PathVariable Long productId, @RequestHeader String username) {
-		log.info("productId：{}", productId);
-		log.info("username：{}", username);
+	//@PreAuthorize("#oauth2.hasScope('fly')")
+	//@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public Order getUser(@PathVariable Long productId, @AuthenticationPrincipal String username) {
+		log.info("username jwt解析获取用户信息：{}", username);
 		Order order = new Order();
 		order.setId(productId);
 		order.setProductId((Long)(productId * 5));
+		log.info("开始请求价格服务获取价格");
+		PriceInfo pi = oAuth2RestTemplate.getForObject(RPURL+"price/"+order.getProductId(), PriceInfo.class);
+		log.info("获取产品id：{},价格：{}",order.getProductId(),pi.getPrice());
 		return order;
 	}
 

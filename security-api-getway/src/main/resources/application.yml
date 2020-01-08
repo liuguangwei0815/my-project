@@ -19,7 +19,7 @@ zuul:
       url: http://localhost:7025
     #认证服务器
     token:
-      url: http://localhost:7024
+      url: http://auth.security.com:7024
       ##需要忽略的header 如果为空那么不忽略，都进行转发
   sensitive-headers:
   ratelimit:
@@ -44,7 +44,15 @@ zuul:
           type:
           - url
           - httpmethod
-        
+          
+security:
+  oauth2:
+    client:
+      client-id: geteway
+      client-secret:  123456     
+    resource:
+      jwt:
+        key-uri: http://auth.security.com:7024/oauth/token_key  
         
            
      

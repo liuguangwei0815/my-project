@@ -1,5 +1,5 @@
 server:
-  port: 7026
+  port: 7028
   servlet:
    session:
      cookie:
@@ -10,3 +10,11 @@ spring:
     name: security-api-price
   
  
+security:
+  oauth2:
+    client:
+      client-id: priceServer
+      client-secret:  123456     
+    resource:
+      jwt:
+        key-uri: http://auth.security.com:7024/oauth/token_key  

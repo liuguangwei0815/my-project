@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import javax.validation.Valid;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PriceController {
 	@GetMapping("/{productId}")
-	public PriceInfo getOrder(@Valid PriceInfo priceInfo,BindingResult error) {
-		log.info("获取价格");
+	public PriceInfo getOrder(@Valid PriceInfo priceInfo,BindingResult error,@AuthenticationPrincipal String username) {
+		log.info("获取价格,同时获取用户信息:{}",username);
 		if(error.hasErrors()) {
 			error.getAllErrors().stream().map(e->buildError(e)).findFirst();
 		}
