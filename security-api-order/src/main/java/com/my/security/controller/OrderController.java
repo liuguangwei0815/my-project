@@ -123,6 +123,9 @@ public class OrderController {
 		PriceInfo pi = oAuth2RestTemplate.getForObject(RPURL+"price/"+order.getProductId(), PriceInfo.class);
 		return order;
 	}
+	
+	
+	
 	//如果是流控了或者降级了 会走这个逻辑
 	public Order getUserBlock(@PathVariable Long productId, @AuthenticationPrincipal String username,BlockException exception)  {
 		log.info("流控了，或者降级了 走了熔断的业务逻辑，"+exception.getClass().getSimpleName());
@@ -131,6 +134,16 @@ public class OrderController {
 		return order;
 	}
 	
+	
+	@GetMapping("/second/{productId}")
+	@SentinelResource(value = "getOrderInfo")//声明资源
+	public Order getOrderInfo(@PathVariable Long productId, @AuthenticationPrincipal String username){
+		log.info("获取订单信息...");
+		Order order = new Order();
+		order.setId(productId);
+		order.setProductId((Long)(productId * 5));
+		return order;
+	}
 
 	private Object buildError(ObjectError e) {
 		throw new RuntimeException(e.getDefaultMessage());

@@ -12,7 +12,7 @@ spring:
     sentinel:
       transport:
         port:  7028 #这个sentinel 会在这个端口启动一个心跳项目
-        dashboard: http://localhost:8080 #注册地址
+        dashboard: http://localhost:7030 #注册地址
   
 security:
   oauth2:
@@ -21,4 +21,10 @@ security:
         key-uri: http://auth.security.com:7024/oauth/token_key
     client:
       client-id: orderServer
-      client-secret:  123456       
+      client-secret:  123456     
+
+sentinel:
+  zookeeper:
+    address: 192.168.2.212:2181
+    path: /sentinel_rule_config
+        
