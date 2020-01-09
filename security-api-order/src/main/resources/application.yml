@@ -8,6 +8,11 @@ server:
 spring:
   application:
     name: security-api-order
+  cloud:
+    sentinel:
+      transport:
+        port:  7028 #这个sentinel 会在这个端口启动一个心跳项目
+        dashboard: http://localhost:8080 #注册地址
   
 security:
   oauth2:

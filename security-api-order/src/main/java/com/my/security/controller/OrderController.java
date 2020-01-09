@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.csp.sentinel.Entry;
+import com.alibaba.csp.sentinel.SphU;
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
+
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -99,16 +104,33 @@ public class OrderController {
 	//@PreAuthorize("#oauth2.hasScope('fly')")
 	//@PreAuthorize("hasRole('ROLE_USER')")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public Order getUser(@PathVariable Long productId, @AuthenticationPrincipal String username) {
+	@SentinelResource(value = "getUser",blockHandler = "getUserBlock")
+	public Order getUser(@PathVariable Long productId, @AuthenticationPrincipal String username) throws InterruptedException {
+		
+//		try (Entry entry = SphU.entry("getUser")){
+//			log.error("getUser 正常流程。。。");
+//		} catch (BlockException e) {
+//			log.error("限流");
+//		}
+//		
+		//为了测试降级 修庙50毫秒
+		Thread.sleep(50);
+		
 		log.info("username jwt解析获取用户信息：{}", username);
 		Order order = new Order();
 		order.setId(productId);
 		order.setProductId((Long)(productId * 5));
-		log.info("开始请求价格服务获取价格");
 		PriceInfo pi = oAuth2RestTemplate.getForObject(RPURL+"price/"+order.getProductId(), PriceInfo.class);
-		log.info("获取产品id：{},价格：{}",order.getProductId(),pi.getPrice());
 		return order;
 	}
+	//如果是流控了或者降级了 会走这个逻辑
+	public Order getUserBlock(@PathVariable Long productId, @AuthenticationPrincipal String username,BlockException exception)  {
+		log.info("流控了，或者降级了 走了熔断的业务逻辑，"+exception.getClass().getSimpleName());
+		Order order = new Order();
+		order.setProductId((Long)(productId * 5));
+		return order;
+	}
+	
 
 	private Object buildError(ObjectError e) {
 		throw new RuntimeException(e.getDefaultMessage());

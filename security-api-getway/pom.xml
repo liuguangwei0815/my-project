@@ -21,7 +21,7 @@
 			<scope>test</scope>
 		</dependency>
 
-	    <dependency>
+		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-oauth2</artifactId>
 		</dependency>
@@ -31,14 +31,14 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-zuul</artifactId>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/com.marcosbarbero.cloud/spring-cloud-zuul-ratelimit -->
 		<dependency>
-		    <groupId>com.marcosbarbero.cloud</groupId>
-		    <artifactId>spring-cloud-zuul-ratelimit</artifactId>
-		    <version>2.2.4.RELEASE</version>
+			<groupId>com.marcosbarbero.cloud</groupId>
+			<artifactId>spring-cloud-zuul-ratelimit</artifactId>
+			<version>2.2.4.RELEASE</version>
 		</dependency>
-		
+
 
 
 		<dependency>
@@ -136,6 +136,14 @@
 			<artifactId>scrypt</artifactId>
 			<version>1.4.0</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.alibaba.csp/sentinel-core -->
+		<dependency>
+			<groupId>com.alibaba.csp</groupId>
+			<artifactId>sentinel-core</artifactId>
+			<version>1.7.1</version>
+		</dependency>
+
 
 
 	</dependencies>
