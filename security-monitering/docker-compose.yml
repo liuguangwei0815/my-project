@@ -2,7 +2,7 @@ version: "3"
 services:
   prometheus:
     image: prom/prometheus:v2.4.3
-    container_name: ' ' #实例名称
+    container_name: 'prometheus' #实例名称
     volumes: #挂靠 找配置 将本地的这个文替换到容器的/etc/prometheus/
     - ./prometheus/:/etc/prometheus/
     ports:
@@ -15,7 +15,7 @@ services:
     ports:
     - '3000:3000'
     volumes:
-    - ./grafana/config/grafana.ini:/etc/grafana/config/grafana.ini #将我们本地目录路的这个grafana.ini 替换我们容器的grafana.ini 这个文件
+    - ./grafana/config/grafana.ini:/etc/grafana/grafana.ini #将我们本地目录路的这个grafana.ini 替换我们容器的grafana.ini 这个文件
     - ./grafana/provisioning/:/etc/grafana/provisioning/ #吧我们本地的这个目录替换我们容器的这个目录
     env_file:
     - ./grafana/config.monitoring #环境配置文件

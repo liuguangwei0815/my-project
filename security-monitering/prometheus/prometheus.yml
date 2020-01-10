@@ -7,7 +7,7 @@ scrape_configs:
   metrics_path: '/actuator/prometheus' #拉取数据的接口
   
   static_configs:
-  - targets: ['192.168.2.212:7025']
+  - targets: ['192.168.2.176:7025']
     labels:
       application: 'springboot-app'
       
