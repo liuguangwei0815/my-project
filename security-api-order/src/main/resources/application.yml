@@ -27,4 +27,18 @@ sentinel:
   zookeeper:
     address: 192.168.2.212:2181
     path: /sentinel_rule_config
+    
+    
+#暴露端点 只能是这些
+management:
+  endpoints:
+    prometheus: # 只有这样子下面的暴露的才会起作用
+      enable: true
+    web:
+      exposure:
+        include:
+        - prometheus
+        - info
+        - health
+    
         

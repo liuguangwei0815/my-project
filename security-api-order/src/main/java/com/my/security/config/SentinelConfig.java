@@ -38,6 +38,10 @@ public class SentinelConfig {
 		ReadableDataSource<String, List<FlowRule>> sourlist = new ZookeeperDataSource<>(zkaddress, zkpath+"/"+appName,
 				source -> JSON.parseArray(source, FlowRule.class));
 		FlowRuleManager.register2Property(sourlist.getProperty());//这里只是单单是流控规则其他的需要再次写
+		
+		
+		
+		
 	}
 
 }

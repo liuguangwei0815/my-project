@@ -144,7 +144,16 @@
 			<version>1.5.2</version><!-- 因为上spring-cloud-starter-alibaba-sentinel 用的是1/5/2 -->
 		</dependency>
 
-
+		<!-- 引入一个可以让项目暴露出接口的依赖 -->
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-actuator</artifactId>
+	</dependency>
+	<!-- 引入一个可以让项目暴露出接口的依赖 然后暴露prometheus 的端点 -->
+	<dependency>
+		<groupId>io.micrometer</groupId>
+		<artifactId>micrometer-registry-prometheus</artifactId>
+	</dependency>
 
 
 
