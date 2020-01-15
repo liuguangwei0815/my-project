@@ -26,7 +26,7 @@ public class ActualConfig extends ResourceServerConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		.requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()//将暴露的接口都放开
+		.requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()//将暴露的接口都放开 为了数据prometheus接口保留出来
 		.anyRequest().authenticated();
 	}
 
