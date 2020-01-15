@@ -2,6 +2,7 @@ package com.my.security.controller;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -63,13 +64,17 @@ public class OrderController {
 	 * @param error
 	 * @param username
 	 * @return
+	 * @throws InterruptedException 
 	 */
 	@PostMapping
-	public Order getOrder(@Valid @RequestBody Order order, BindingResult error, @AuthenticationPrincipal String username) {
+	public Order getOrder(@Valid @RequestBody Order order, BindingResult error, @AuthenticationPrincipal String username) throws InterruptedException {
 		if (error.hasErrors()) {
 			error.getAllErrors().stream().map(e -> buildError(e)).findFirst();
 		}
 		log.info("oauth2 获取用户信息:{}", username);
+		
+		
+		Thread.sleep(RandomUtils.nextInt(100, 1000));
 
 		// PriceInfo pi = restTemplate.getForObject(RPURL+"price/"+order.getProductId(),
 		// PriceInfo.class);

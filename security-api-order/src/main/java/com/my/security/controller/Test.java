@@ -28,7 +28,7 @@ public class Test {
 				rt.exchange("http://order.security.com:7025/orders",HttpMethod.POST,entity, String.class);
 			} catch (Exception e) {
 			}
-			Thread.sleep(100);
+			//Thread.sleep(100);
 		}
 
 		
