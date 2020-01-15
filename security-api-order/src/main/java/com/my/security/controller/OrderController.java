@@ -65,7 +65,7 @@ public class OrderController {
 	 * @return
 	 */
 	@PostMapping
-	public Order getOrder(@Valid @RequestBody Order order, BindingResult error, @RequestHeader String username) {
+	public Order getOrder(@Valid @RequestBody Order order, BindingResult error, @AuthenticationPrincipal String username) {
 		if (error.hasErrors()) {
 			error.getAllErrors().stream().map(e -> buildError(e)).findFirst();
 		}
@@ -120,7 +120,7 @@ public class OrderController {
 		Order order = new Order();
 		order.setId(productId);
 		order.setProductId((Long)(productId * 5));
-		PriceInfo pi = oAuth2RestTemplate.getForObject(RPURL+"price/"+order.getProductId(), PriceInfo.class);
+		//PriceInfo pi = oAuth2RestTemplate.getForObject(RPURL+"price/"+order.getProductId(), PriceInfo.class);
 		return order;
 	}
 	
@@ -143,9 +143,9 @@ public class OrderController {
 		order.setId(productId);
 		order.setProductId((Long)(productId * 5));
 		
-		throw new RuntimeException("hahaha");
+		//throw new RuntimeException("hahaha");
 		
-		//return order;
+		return order;
 	}
 
 	private Object buildError(ObjectError e) {
