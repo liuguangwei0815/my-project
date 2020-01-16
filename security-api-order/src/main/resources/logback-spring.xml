@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<configuration>
+	<!-- 把我们输入的日志给logstatic logstash.conf 配置的tcp端口是5000 他会把tcp接受文件 然后给elasticsercher -->
+	<appender name="LOGSTASH"
+		class="net.logstash.logback.appender.LogstashAccessTcpSocketAppender">
+		<destination>localhost:5000</destination>
+		<!-- <encoder charset="UTF-8"
+			class="net.logstash.logback.encoder.LogstashEncoder"></encoder> -->
+		<encoder>
+			<pattern>%{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} -%msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>	
+			
+	</appender>
+
+	<!-- 使 logback 生效 -->
+	<include
+		resource="org/springframework/boot/logging/logback/base.xml"></include>
+
+	<root>
+
+		<appender-ref ref="LOGSTASH" />
+		<appender-ref ref="CONSOLE" />
+	</root>
+
+
+</configuration>
