@@ -110,5 +110,6 @@
 		<module>security-api-auth</module>
 		<module>security-api-getway</module>
 		<module>security-api-admin</module>
+		<module>spring-tx-jpa</module>
 	</modules>
 </project>
