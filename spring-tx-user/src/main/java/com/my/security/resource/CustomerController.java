@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSON;
 import com.my.security.bean.Customer;
 import com.my.security.dao.CustomorResposity;
+import com.my.security.dto.CustomerOrder;
+import com.my.security.openfeign.OrderFeignClient;
 import com.my.security.service.impl.CustomorAnnotiationServiceImpl;
 
 @RestController
@@ -23,12 +26,20 @@ public class CustomerController {
 	private CustomorAnnotiationServiceImpl customorAnnotiationServiceImpl;
 	@Autowired
 	private CustomorResposity customorResposity;
+	@Autowired
+	private OrderFeignClient orderFeignClient;
+	
 
 	@PostMapping
 	public Customer create(@RequestBody Customer obj,HttpServletRequest request) {
 		return customorAnnotiationServiceImpl.create(obj);
 	}
 
+	
+	@GetMapping("/getOrderInfo")
+	public CustomerOrder getOrderInfo(HttpServletRequest request) {
+		return JSON.parseObject(orderFeignClient.getOrderInfoById(1l), CustomerOrder.class);
+	}
 	
 	@GetMapping
 	public List<Customer> createincode(HttpServletRequest request) {

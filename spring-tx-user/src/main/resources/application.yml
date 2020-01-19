@@ -7,7 +7,7 @@ server:
 #服务的名称
 spring:
   application:
-    name: security-tx-user
+    name: spring-tx-user
 
 
 
@@ -17,3 +17,4 @@ eureka:
     register-with-eureka: true
     service-url:
       defaultZone: http://localhost:7031/eureka
+      
