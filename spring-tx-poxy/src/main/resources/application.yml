@@ -1,0 +1,35 @@
+server:
+  port: 7032
+  servlet:
+    session:
+      cookie:
+        name: SSOCLIENT2EPOXY
+#服务的名称
+spring:
+  application:
+    name: security-api-poxy
+
+
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:7031/eureka
+      
+zuul:
+  routes:
+    userApi:
+                  #第一种 访问  geteway/user/**
+      #path: /user/** #匹配这个地址
+      #service-id: security-tx-user #费伍德 spring application-name
+      #strip-prefix: false #是否去掉前缀
+                  #第二种   直接访问  geteway/userApi
+      service-id: security-tx-user
+      
+    order:
+      service-id: security-tx-order
+      
+      
+      

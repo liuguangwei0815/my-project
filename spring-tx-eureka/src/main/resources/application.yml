@@ -1,0 +1,19 @@
+server:
+  port: 7031
+  servlet:
+    session:
+      cookie:
+        name: SSOCLIENT2EUREKA
+#服务的名称
+spring:
+  application:
+    name: security-api-eureka
+
+
+
+eureka:
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+    service-url:
+      defaultZone: http://localhost:7031/eureka
