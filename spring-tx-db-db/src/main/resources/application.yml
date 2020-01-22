@@ -1,0 +1,13 @@
+server:
+  port: 7034
+  servlet:
+   session:
+     cookie:
+       name: SSOCLIENTSPRINGTXDB
+#服务的名称
+spring:
+  application:
+    name: spring-tx-db-db
+  
+
+        

@@ -115,5 +115,6 @@
 		<module>spring-tx-poxy</module>
 		<module>spring-tx-user</module>
 		<module>spring-tx-order</module>
+		<module>spring-tx-db-db</module>
 	</modules>
 </project>
