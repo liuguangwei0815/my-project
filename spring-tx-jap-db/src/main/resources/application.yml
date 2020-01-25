@@ -1,0 +1,13 @@
+server:
+  port: 7035
+  servlet:
+   session:
+     cookie:
+       name: SSOCLIENTSPRINGTXJPADB
+#服务的名称
+spring:
+  application:
+    name: spring-tx-jpa-db
+  
+
+        
