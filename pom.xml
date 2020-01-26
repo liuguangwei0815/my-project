@@ -117,5 +117,6 @@
 		<module>spring-tx-order</module>
 		<module>spring-tx-db-db</module>
 		<module>spring-tx-jap-db</module>
+		<module>spring-tx-jms-db</module>
 	</modules>
 </project>

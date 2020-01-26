@@ -1,0 +1,13 @@
+server:
+  port: 7036
+  servlet:
+   session:
+     cookie:
+       name: SSOCLIENTSPRINGTXJMSDB
+#服务的名称
+spring:
+  application:
+    name: spring-tx-jms-db
+  
+
+        
