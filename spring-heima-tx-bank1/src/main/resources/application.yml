@@ -1,0 +1,41 @@
+server:
+  port: 7037
+  servlet:
+    session:
+      cookie:
+        name: SESSIONSPRINGHEIMATXBANK1
+#服务的名称
+spring:
+  application:
+    name: spring-heima-tx-bank1
+    
+  ##################### DB #####################
+  datasource:
+    ds0:
+      url: jdbc:mysql://localhost:5023/bank1?useUnicode=true
+      username: root
+      password: 123456
+      type: com.alibaba.druid.pool.DruidDataSource
+      driver-class-name: com.mysql.jdbc.Driver
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT user()
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      connection-properties: druid.stat.mergeSql:true;druid.stat.slowSqlMillis:5000    
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7036/eureka #这里连接自己
+
+feign:
+  hystrix:
+    enabled: true
