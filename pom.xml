@@ -121,5 +121,7 @@
 		<module>spring-heima-tx-euraka</module>
 		<module>spring-heima-tx-bank1</module>
 		<module>spring-heima-tx-bank2</module>
+		<module>spring-heima-tcc-bank2</module>
+		<module>spring-heima-tcc-bank1</module>
 	</modules>
 </project>

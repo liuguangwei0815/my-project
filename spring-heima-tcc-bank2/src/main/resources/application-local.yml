@@ -1,0 +1,24 @@
+org: #配置hmily的数据库
+  dromara:
+    hmily :
+      serializer : kryo
+      recoverDelayTime : 30
+      retryMax : 30
+      scheduledDelay : 30
+      scheduledThreadMax :  10
+      repositorySupport : db
+      started: false #事务发起方，如果是事务发起方需要这里填写true
+      hmilyDbConfig :
+        driverClassName  : com.mysql.jdbc.Driver
+        url :  jdbc:mysql://localhost:5023/hmily?useUnicode=true
+        username : root
+        password : 123456
+#erializer :这里我推荐使用是kroy。当然hmily也支持hessian,protostuff,jdk。在我们测试中表现为: kroy>hessian>protostuff>jdk
+#recoverDelayTime :定时任务延迟时间（单位是秒，默认120。这个参数只是要大于你的rpc调用的超时时间设置。
+#retryMax : 最大重复次数，默认3次。当你的服务down机，定时任务会执行retryMax次数去执行你的cancel还是confrim。
+#bufferSize: disruptor的bufferSize,当高并发的时候，可以调大。注意是 2n次方
+#consumerThreads distuptor消费线程数量,高并发的时候，可以调大。
+#started: 注意在是发起方的时候，把此属性设置为true。参与方为false。
+#asyncThreads 异步执行confirm和cancel线程池线程的大小，高并发的时候请调大
+
+        
