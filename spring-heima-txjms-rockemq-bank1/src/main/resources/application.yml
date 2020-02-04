@@ -81,13 +81,6 @@ management:
       exposure:
         include: refresh,health,info,env
 
-
-#rocketmq 配置        
-rocketmq:
-  producer: 
-    group: spring-txmsg-group-bank1 #这个用来启动时候的初始化的生产group
-  name-server: 127.0.0.1:9876 #这个端口不修改默认是9876
-  
   
   
   

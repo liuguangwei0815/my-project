@@ -6,6 +6,11 @@ import java.util.Date;
 import lombok.Data;
 
 
+/**
+ * 本地事务幂等判断
+ * @author liuwei
+ *
+ */
 @Data
 public class DeDuplication implements Serializable{
 

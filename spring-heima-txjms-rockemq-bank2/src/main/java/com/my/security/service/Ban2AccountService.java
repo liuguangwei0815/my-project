@@ -1,9 +1,10 @@
 package com.my.security.service;
 
-import com.my.security.bean.AccountInfo;
+import com.my.security.bean.AccountInfoTxMsg;
 
 public interface Ban2AccountService {
 
-	void updateBan2Account(AccountInfo acc);
+	void updateBan2Account(AccountInfoTxMsg obj);
+
 
 }

@@ -10,14 +10,12 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import com.alibaba.druid.pool.DruidDataSource;
@@ -35,9 +33,6 @@ public class DruidConfiguration {
 	// mapper.java 存放路径，被@MapperScan扫描的，注入 sqlsession的
 	protected final static String MAPPER_PACKAGE = "com.my.security.mapper";
 
-	//环境参数
-	@Autowired
-	private Environment env;
 
 	/*
 	 * 注册过滤器

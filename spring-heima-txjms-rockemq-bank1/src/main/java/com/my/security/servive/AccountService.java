@@ -3,12 +3,16 @@
  */
 package com.my.security.servive;
 
-import com.my.security.bean.AccountInfo;
+import com.my.security.bean.AccountInfoTxMsg;
 
 /**
  * @author liuwei
  *
  */
 public interface AccountService {
-	public void updateBank1Account(AccountInfo obj);
+
+	void sendRocketMqTxMsg(AccountInfoTxMsg obj);
+
+	void updateBank1Account(AccountInfoTxMsg obj);
+	
 }
