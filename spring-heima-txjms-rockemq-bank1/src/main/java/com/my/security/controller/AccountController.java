@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.my.security.bean.AccountInfo;
 import com.my.security.bean.AccountInfoTxMsg;
+//github.com/liuwei0815/my-security-oauth2.git
 import com.my.security.servive.AccountService;
 
 /**
@@ -27,7 +28,8 @@ public class AccountController {
 
 	@Autowired
 	public AccountService accountService;
-
+	
+	
 	@PostMapping("/trans")
 	public String trans(@RequestBody AccountInfo info) {
 
