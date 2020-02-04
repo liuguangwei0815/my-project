@@ -125,5 +125,7 @@
 		<module>spring-heima-tcc-bank1</module>
 		<module>spring-heima-txjms-rockemq-bank1</module>
 		<module>spring-heima-txjms-rockemq-bank2</module>
+		<module>spring-heima-maxnotify-pay</module>
+		<module>spring-heima-maxnotify-account</module>
 	</modules>
 </project>

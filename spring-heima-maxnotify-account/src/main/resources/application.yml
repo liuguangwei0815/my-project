@@ -1,0 +1,87 @@
+server:
+  port: 7043
+  servlet:
+    session:
+      cookie:
+        name: SESSIONSPRINGHEIMATXACCOUNTROCK
+#服务的名称
+spring:
+  application:
+    name: spring-heima-maxnotify-rockemq-account
+  profiles:
+    active: local #添加另外一个配置文件application-local.yml
+  main:
+    allow-bean-definition-overriding: true #运行如果bean相同 那么名字进行覆盖
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    
+  ##################### DB #####################
+  datasource:
+    ds0:
+      url: jdbc:mysql://localhost:5023/bank1?useUnicode=true
+      username: root
+      password: 123456
+      type: com.alibaba.druid.pool.DruidDataSource
+      driver-class-name: com.mysql.jdbc.Driver
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT user()
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      connection-properties: druid.stat.mergeSql:true;druid.stat.slowSqlMillis:5000    
+
+
+eureka:
+  instance:
+    preferIpAddress: true
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${spring.application.instance_id:${server.port}}
+    lease-renewal-interval-in-seconds: 2    # 续约更新时间间隔（默认30秒）
+    lease-expiration-duration-in-seconds: 6 # 续约到期时间（默认90秒）
+  client:
+    service-url:
+      defaultZone: http://localhost:7036/eureka #这里连接自己
+    registry-fetch-interval-seconds: 5 # 抓取服务列表     
+
+feign:
+  hystrix:
+    enabled: true
+    
+    
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 90000  # 设置熔断超时时间  default 1000
+        timeout:
+          enabled: true # 打开超时熔断功能 default true
+          
+              
+ribbon:
+  ConnectTimeout: 9000 # 设置连接超时时间 default 2000
+  ReadTimeout: 9000    # 设置读取超时时间  default 5000
+  OkToRetryOnAllOperations: true # 对所有操作请求都进行重试  default false
+  MaxAutoRetriesNextServer: 2    # 切换实例的重试次数  default 1
+  MaxAutoRetries: 1     # 对当前实例的重试次数 default 0   
+  eager-load: #开启立即加载  很多时候feign 在第一次连接时候会出现超时
+    enabled: true
+    clients: spring-heima-tcc-bank2
+  
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh,health,info,env
+
+  
+  
+  
+        
