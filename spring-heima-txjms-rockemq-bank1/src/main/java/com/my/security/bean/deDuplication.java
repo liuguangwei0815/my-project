@@ -7,7 +7,7 @@ import lombok.Data;
 
 
 @Data
-public class LocalTradeLog implements Serializable{
+public class deDuplication implements Serializable{
 
 	/**
 	 * 
