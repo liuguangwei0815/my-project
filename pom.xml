@@ -123,5 +123,7 @@
 		<module>spring-heima-tx-bank2</module>
 		<module>spring-heima-tcc-bank2</module>
 		<module>spring-heima-tcc-bank1</module>
+		<module>spring-heima-txjms-rockemq-bank1</module>
+		<module>spring-heima-txjms-rockemq-bank2</module>
 	</modules>
 </project>
