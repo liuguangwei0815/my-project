@@ -127,5 +127,6 @@
 		<module>spring-heima-txjms-rockemq-bank2</module>
 		<module>spring-heima-maxnotify-pay</module>
 		<module>spring-heima-maxnotify-account</module>
+		<module>spring-mianshi-code</module>
 	</modules>
 </project>

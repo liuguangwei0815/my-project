@@ -45,7 +45,7 @@ public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
 		//设置两个授权服务端
 		clients.inMemory().withClient("ssoClinet1").secret(passwordEncoder().encode("ssoClinetpw"))
 				.authorizedGrantTypes("authorization_code", "refresh_token").scopes("all")
-				.redirectUris("http://localhost:7020/login")
+				.redirectUris("http://localhost:7020/login").autoApprove(true)
 				.and()
 				.withClient("ssoClinet2").secret(passwordEncoder().encode("ssoClinetpw2"))
 				.authorizedGrantTypes("authorization_code", "refresh_token").scopes("all")

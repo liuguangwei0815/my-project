@@ -1,0 +1,15 @@
+server:
+  port: 7047
+  servlet:
+    session:
+      cookie:
+        name: SESSIONSPRINGHEIMATXBANK2MIANSHI
+#服务的名称
+spring:
+  application:
+    name: spring-mianshi-code
+
+    
+initBean:
+  id: 2
+  name: jackyml

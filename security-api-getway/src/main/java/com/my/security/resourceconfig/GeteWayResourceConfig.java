@@ -48,7 +48,8 @@ public class GeteWayResourceConfig extends ResourceServerConfigurerAdapter {
 																									// 当前用户信息
 		//限流过滤器 放在spring 过滤器第一个
 		http.addFilterBefore(new MyLimitRateFilter(), SecurityContextPersistenceFilter.class);
-		//审计日志 应该放在认证之后，授权之前
+		//审计日志 应该放在认证之后，授权之前  如果没有异常 那么 就应该在Oath2ClientAuthentictionProccessingFilter 之后，但是如果发生了异常，那么还会经过
+		// 给拦截了拦截了，然后直接返抛出异常了 通过FilterSecuritInterctipin 抛出给ExceptionTraslationFilter 通过对应的异常 提交各对应的异常处理类，如401 403
 		http.addFilterBefore(new AuditLogFilter(), ExceptionTranslationFilter.class);
 	}
 
