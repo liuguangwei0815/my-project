@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MyLimitRateFilter extends OncePerRequestFilter{
 	
-	private RateLimiter limit = RateLimiter.create(1);//一秒钟只能通过一次请求
+	private RateLimiter limit = RateLimiter.create(20);//一秒钟只能通过一次请求
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

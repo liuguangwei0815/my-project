@@ -3,9 +3,9 @@ package com.my.security.controller;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.RandomUtils;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.validation.BindingResult;
@@ -110,7 +110,7 @@ public class OrderController {
 	//@PreAuthorize("hasRole('ROLE_USER')")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@SentinelResource(value = "getUser",blockHandler = "getUserBlock")
-	public Order getUser(@PathVariable Long productId, @AuthenticationPrincipal String username) throws InterruptedException {
+	public Order getUser(@PathVariable Long productId, Authentication user) throws InterruptedException {
 		
 //		try (Entry entry = SphU.entry("getUser")){
 //			log.error("getUser 正常流程。。。");
@@ -119,9 +119,9 @@ public class OrderController {
 //		}
 //		
 		//为了测试降级 修庙50毫秒
-		Thread.sleep(50);
+		//Thread.sleep(50);
 		
-		log.info("username jwt解析获取用户信息：{}", username);
+		log.info("username jwt解析获取用户信息：{}", user.getPrincipal());
 		Order order = new Order();
 		order.setId(productId);
 		order.setProductId((Long)(productId * 5));

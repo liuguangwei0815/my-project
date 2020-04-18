@@ -32,8 +32,9 @@ public class MyPermissionHandlerImpl implements MyPermissionHandler {
 		if(authentication instanceof AnonymousAuthenticationToken) {
 			throw new AccessTokenRequiredException(null);
 		}
-		
-		return new Random().nextInt() % 2 == 0;
+		//下面这个模拟403
+		//return new Random().nextInt() % 2 == 0;
+		return true;
 	}
 
 }
